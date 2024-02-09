@@ -45,6 +45,6 @@ jobs:
       - name: Commit and push changes to branch
         id: commit_changes
         if: steps.check_contributor.outputs.exists == 'false'
-        uses: pre-commit-ci/lite-action@v1.0.1
+        uses: pre-commit-ci/lite-action@v1.0.2
         with:
           msg: Add ${{ env.GITHUB_ACTOR }} to AUTHORS.md

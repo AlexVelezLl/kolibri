@@ -15,7 +15,7 @@
     "immutable": "^3.8.1",
     "jquery": "2.2.4",
     "kmath": "^0.0.1",
-    "qtip2": "2.2.0",
+    "qtip2": "3.0.3",
     "raphael": "^2.2.7",
     "react": "15.3.2",
     "react-addons-create-fragment": "^15.6.0",

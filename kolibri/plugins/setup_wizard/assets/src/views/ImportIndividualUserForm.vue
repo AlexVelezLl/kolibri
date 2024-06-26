@@ -113,8 +113,8 @@
   import commonSyncElements from 'kolibri-common/mixins/commonSyncElements';
   import { DemographicConstants, ERROR_CONSTANTS } from 'kolibri/constants';
   import TaskResource from 'kolibri/apiResources/TaskResource';
+  import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
   import CatchErrors from 'kolibri/utils/CatchErrors';
-  import { FacilityImportResource } from '../api';
   import { FooterMessageTypes } from '../constants';
   import commonProfileStrings from '../../../../user_profile/assets/src/views/commonProfileStrings';
   import OnboardingStepBase from './OnboardingStepBase';
@@ -358,7 +358,7 @@
           password: this.adminPassword,
           facility_id: this.facility.id,
         };
-        FacilityImportResource.listfacilitylearners(params)
+        FacilityUserResource.listRemoteFacilityLearners(params)
           .then(data => {
             this.wizardService.send({
               type: 'CONTINUEADMIN',

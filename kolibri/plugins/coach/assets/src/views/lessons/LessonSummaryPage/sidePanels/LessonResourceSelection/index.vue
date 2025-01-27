@@ -31,6 +31,7 @@
       :treeFetch="treeFetch"
       :selectionRules="selectionRules"
       :selectedResources="selectedResources"
+      :selectedResourcesSize="selectedResourcesSize"
       @selectResources="selectResources"
       @deselectResources="deselectResources"
       @setSelectedResources="setSelectedResources"
@@ -40,7 +41,10 @@
       <div class="bottom-nav-container">
         <KButtonGroup>
           <KRouterLink
-            v-if="selectedResources.length > 0"
+            v-if="
+              selectedResources.length > 0 &&
+                $route.name !== PageNames.LESSON_PREVIEW_SELECTED_RESOURCES
+            "
             :to="{ name: PageNames.LESSON_PREVIEW_SELECTED_RESOURCES }"
           >
             {{ selectedResourcesMessage }}
@@ -110,7 +114,7 @@
       };
     },
     computed: {
-      totalSize() {
+      selectedResourcesSize() {
         let size = 0;
         this.selectedResources.forEach(resource => {
           const { files = [] } = resource;
@@ -124,7 +128,7 @@
         const { someResourcesSelected$ } = coachStrings;
         return someResourcesSelected$({
           count: this.selectedResources.length,
-          bytesText: bytesForHumans(this.totalSize),
+          bytesText: bytesForHumans(this.selectedResourcesSize),
         });
       },
     },

@@ -13,7 +13,6 @@ import {
   LearningActivities,
   NoCategories,
   ResourcesNeededTypes,
-  ContentNodeKinds,
 } from 'kolibri/constants';
 import useUser from 'kolibri/composables/useUser';
 
@@ -159,6 +158,7 @@ export default function useBaseSearch({
   store,
   router,
   baseurl,
+  filters,
   searchResultsRouteName,
   reloadOnDescendantChange = true,
   fetchContentNodeProgress,
@@ -251,6 +251,9 @@ export default function useBaseSearch({
       getParams.lft__gt = descValue.lft;
       getParams.rght__lt = descValue.rght;
     }
+    if (filters) {
+      Object.assign(getParams, filters);
+    }
     if (get(displayingSearchResults)) {
       getParams.max_results = 25;
       const terms = get(searchTerms);
@@ -280,12 +283,6 @@ export default function useBaseSearch({
       if (get(isUserLoggedIn)) {
         fetchContentNodeProgress?.(getParams);
       }
-
-      // const query = get(route).query;
-      // if (query?.filter_quiz) {
-      getParams.contains_quiz = true;
-      getParams.kind_in = [ContentNodeKinds.EXERCISE, ContentNodeKinds.TOPIC];
-      // }
 
       ContentNodeResource.fetchCollection({ getParams }).then(data => {
         set(_results, data.results || []);

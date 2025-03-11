@@ -379,7 +379,6 @@
           filters: { kind: ContentNodeKinds.EXERCISE },
           annotator: results => results.filter(isPracticeQuiz),
         },
-
         channels: {
           filters: {
             contains_exercise: true,
@@ -404,6 +403,12 @@
             contains_quiz: selectPracticeQuiz ? true : null,
           },
           annotator: annotateTopicsWithDescendantCounts,
+        },
+        search: {
+          filters: {
+            kind_in: [ContentNodeKinds.EXERCISE, ContentNodeKinds.TOPIC],
+            contains_quiz: selectPracticeQuiz ? true : null,
+          },
         },
       });
 

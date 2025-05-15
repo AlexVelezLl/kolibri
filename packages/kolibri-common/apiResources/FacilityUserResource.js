@@ -1,6 +1,6 @@
 import { Resource } from 'kolibri/apiResource';
-import urls from 'kolibri.urls';
-import client from 'kolibri.client';
+import urls from 'kolibri/urls';
+import client from 'kolibri/client';
 
 export default new Resource({
   name: 'facilityuser',

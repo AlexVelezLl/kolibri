@@ -7,7 +7,7 @@
     @navIconClick="importUserService.send('RESET_IMPORT')"
   >
     <KPageContainer class="device-container">
-      <h1> {{ $tr("selectAUser") }}</h1>
+      <h1>{{ $tr('selectAUser') }}</h1>
       <KCircularLoader v-if="usersLoading" />
       <UsersList
         v-else
@@ -31,9 +31,9 @@
 
 <script>
 
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import ImmersivePage from 'kolibri.coreVue.components.ImmersivePage';
-  import { TaskResource } from 'kolibri.resources';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
+  import TaskResource from 'kolibri/apiResources/TaskResource';
   import commonDeviceStrings from '../../../views/commonDeviceStrings';
   import UsersList from '../UsersList.vue';
   import useUsers from '../../composables/useUsers';
@@ -78,7 +78,7 @@
           ...user,
           isImported: this.localUsers.some(localUser => localUser.id === user.id),
           isImporting: this.usersBeingImportedRef.some(
-            importingUser => importingUser.id === user.id
+            importingUser => importingUser.id === user.id,
           ),
         }));
       },

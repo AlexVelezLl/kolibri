@@ -1,7 +1,7 @@
+import KolibriApp from 'kolibri-app';
 import routes from './routes';
 import pluginModule from './modules/pluginModule';
 import RootVue from './views/UsersPageIndex';
-import KolibriApp from 'kolibri_app';
 
 class UsersModule extends KolibriApp {
   get RootVue() {

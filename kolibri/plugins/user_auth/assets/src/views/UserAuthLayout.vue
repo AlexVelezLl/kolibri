@@ -137,9 +137,9 @@
 
     @media print {
       /* Without this, things won't print correctly
-    *  - Firefox: Tables will get cutoff
-    *  - Chrome: Table header won't repeat correctly on each page
-    */
+  *  - Firefox: Tables will get cutoff
+  *  - Chrome: Table header won't repeat correctly on each page
+  */
       display: block;
     }
   }

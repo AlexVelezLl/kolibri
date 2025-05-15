@@ -494,10 +494,10 @@
   }
 
   /* The KIconButton is just a bit larger than the space we
-  have vertically, so it affected spacing between items. By
-  positioning it absolutely, we put it where it belongs visually
-  but strip it of the power to affect anything else's spacing.
-  */
+have vertically, so it affected spacing between items. By
+positioning it absolutely, we put it where it belongs visually
+but strip it of the power to affect anything else's spacing.
+*/
   .absolute-icon {
     position: absolute;
     top: -6px;

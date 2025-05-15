@@ -1,7 +1,7 @@
-import { checkCapability } from 'kolibri.utils.appCapabilities';
-import { Presets } from 'kolibri.coreVue.vuex.constants';
+import { checkCapability } from 'kolibri/utils/appCapabilities';
+import { Presets } from 'kolibri/constants';
 
-import { getImportLodUsersDefinition } from 'kolibri.machines.importLodUsersMachine';
+import { getImportLodUsersDefinition } from 'kolibri-common/machines/importLodUsersMachine';
 
 /**
  * __ Setting up the XState Visualizer __

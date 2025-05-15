@@ -6,7 +6,7 @@
   >
     <KPageContainer>
       <div class="header">
-        <h1>{{ coreString('usersLabel') }} </h1>
+        <h1>{{ coreString('usersLabel') }}</h1>
         <KButton
           :text="deviceString('importUserLabel')"
           @click="showSelectDevice = true"
@@ -69,10 +69,10 @@
 
 <script>
 
-  import AppBarPage from 'kolibri.coreVue.components.AppBarPage';
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import { SelectDeviceModalGroup } from 'kolibri.coreVue.componentSets.sync';
-  import { LodTypePresets } from 'kolibri.coreVue.vuex.constants';
+  import AppBarPage from 'kolibri/components/pages/AppBarPage';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import SelectDeviceModalGroup from 'kolibri-common/components/syncComponentSet/SelectDeviceModalGroup';
+  import { LodTypePresets } from 'kolibri/constants';
   import commonDeviceStrings from '../../views/commonDeviceStrings';
 
   import useUsers from '../composables/useUsers';

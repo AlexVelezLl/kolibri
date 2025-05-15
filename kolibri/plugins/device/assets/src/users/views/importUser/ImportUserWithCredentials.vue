@@ -14,7 +14,10 @@
           {{ deviceString('importUserLabel') }}
         </h1>
         <p>{{ $tr('enterCredentials') }}</p>
-        <p v-if="error && !useAdmin" :style="{ color: $themeTokens.error }">
+        <p
+          v-if="error && !useAdmin"
+          :style="{ color: $themeTokens.error }"
+        >
           {{ coreString('invalidCredentialsError') }}
         </p>
         <KTextbox
@@ -46,13 +49,13 @@
 
         <KModal
           v-if="deviceLimitations"
-          :title="$tr('deviceLimitationsTitle') "
+          :title="$tr('deviceLimitationsTitle')"
           :cancelText="coreString('cancelAction')"
           :submitText="coreString('importAction')"
           @cancel="closeModal"
           @submit="importUser"
         >
-          <p> {{ modalMessage }} </p>
+          <p>{{ modalMessage }}</p>
         </KModal>
 
         <KModal
@@ -63,8 +66,11 @@
           @cancel="closeModal"
           @submit="moveAdmin"
         >
-          <p> {{ adminModalMessage }} </p>
-          <p v-if="error && useAdmin" :style="{ color: $themeTokens.error }">
+          <p>{{ adminModalMessage }}</p>
+          <p
+            v-if="error && useAdmin"
+            :style="{ color: $themeTokens.error }"
+          >
             {{ coreString('invalidCredentialsError') }}
           </p>
           <KTextbox
@@ -101,15 +107,16 @@
 <script>
 
   import get from 'lodash/get';
-  import { currentLanguage } from 'kolibri.utils.i18n';
-  import BottomAppBar from 'kolibri.coreVue.components.BottomAppBar';
-  import PasswordTextbox from 'kolibri.coreVue.components.PasswordTextbox';
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import commonSyncElements from 'kolibri.coreVue.mixins.commonSyncElements';
-  import { DemographicConstants, ERROR_CONSTANTS } from 'kolibri.coreVue.vuex.constants';
-  import { TaskResource, FacilityUserResource } from 'kolibri.resources';
-  import CatchErrors from 'kolibri.utils.CatchErrors';
-  import ImmersivePage from 'kolibri.coreVue.components.ImmersivePage';
+  import { currentLanguage } from 'kolibri/utils/i18n';
+  import BottomAppBar from 'kolibri/components/BottomAppBar';
+  import PasswordTextbox from 'kolibri-common/components/userAccounts/PasswordTextbox';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import commonSyncElements from 'kolibri-common/mixins/commonSyncElements';
+  import { DemographicConstants, ERROR_CONSTANTS } from 'kolibri/constants';
+  import TaskResource from 'kolibri/apiResources/TaskResource';
+  import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
+  import CatchErrors from 'kolibri/utils/CatchErrors';
+  import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
   import commonProfileStrings from '../../../../../../user_profile/assets/src/views/commonProfileStrings';
   import commonDeviceStrings from '../../../views/commonDeviceStrings';
 
@@ -221,7 +228,7 @@
         this.error = false;
 
         this.useAdmin = true;
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           this.$refs.adminUsernameTextbox.focus();
         });
       },
@@ -276,7 +283,7 @@
           } else if (
             Array.isArray(errorData) &&
             errorData.find(
-              e => get(e, 'metadata.message', null) === ERROR_CONSTANTS.DEVICE_LIMITATIONS
+              e => get(e, 'metadata.message', null) === ERROR_CONSTANTS.DEVICE_LIMITATIONS,
             )
           ) {
             const error_info = errorData.reduce((info, err) => {

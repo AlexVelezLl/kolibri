@@ -1,7 +1,7 @@
 import { createMachine, send, assign } from 'xstate';
 import uniq from 'lodash/uniq';
 
-import { LodTypePresets } from 'kolibri.coreVue.vuex.constants';
+import { LodTypePresets } from 'kolibri/constants';
 
 // Will require a PREVIOUS_STEP event to go back to the previous step (if needed)
 

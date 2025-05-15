@@ -1,8 +1,9 @@
-import UserType from 'kolibri.utils.UserType';
-import { UserKinds } from 'kolibri.coreVue.vuex.constants';
-import { getCurrentInstance, ref, inject, onMounted } from 'kolibri.lib.vueCompositionApi';
-import { TaskResource, FacilityUserResource } from 'kolibri.resources';
-import { TaskStatuses } from 'kolibri.utils.syncTaskUtils';
+import UserType from 'kolibri-common/utils/userType';
+import { UserKinds } from 'kolibri/constants';
+import { getCurrentInstance, ref, inject, onMounted } from 'vue';
+import TaskResource from 'kolibri/apiResources/TaskResource';
+import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
+import { TaskStatuses } from 'kolibri-common/utils/syncTaskUtils';
 import { deviceString } from '../../views/commonDeviceStrings';
 
 const isPooling = ref(false);

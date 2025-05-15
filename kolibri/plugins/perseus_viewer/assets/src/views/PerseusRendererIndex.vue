@@ -758,7 +758,7 @@
   /* Perseus Hacks */
 
   /* The rest in this <style> block are mostly styles that
-   help force Perseus exercises to render within the allotted space. */
+ help force Perseus exercises to render within the allotted space. */
 
   .framework-perseus {
     position: relative; /* Make it a positioning context */

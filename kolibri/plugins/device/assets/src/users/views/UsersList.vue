@@ -7,7 +7,10 @@
       placeholder="Search for a user"
       :style="{ marginBottom: '16px', marginLeft: 'auto', display: 'block' }"
     />
-    <ul v-if="filteredUsers.length" class="users-list">
+    <ul
+      v-if="filteredUsers.length"
+      class="users-list"
+    >
       <li
         v-for="user in filteredUsers"
         :key="user.id"
@@ -52,14 +55,14 @@
         <KCircularLoader
           v-else-if="user.isImporting"
           :size="24"
-          style="margin-right: 0;"
+          style="margin-right: 0"
         />
         <p
           v-else
           class="imported"
           :style="{ color: $themeTokens.annotation }"
         >
-          {{ $tr("imported") }}
+          {{ $tr('imported') }}
         </p>
       </li>
     </ul>
@@ -81,9 +84,9 @@
 
 <script>
 
-  import { UserKinds } from 'kolibri.coreVue.vuex.constants';
-  import FilterTextbox from 'kolibri.coreVue.components.FilterTextbox';
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
+  import { UserKinds } from 'kolibri/constants';
+  import FilterTextbox from 'kolibri/components/FilterTextbox';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
 
   export default {
     name: 'UsersList',

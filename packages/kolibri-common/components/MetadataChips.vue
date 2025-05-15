@@ -47,7 +47,7 @@
 </script>
 
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
   .metadata-chips {
     display: flex;

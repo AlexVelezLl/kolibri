@@ -21,7 +21,10 @@
           :itemValue="x => x.id"
         />
 
-        <label class="select-button-label" for="select-address-button">
+        <label
+          class="select-button-label"
+          for="select-address-button"
+        >
           {{ $tr('selectDifferentDeviceLabel') }}
         </label>
         <KButton
@@ -53,11 +56,12 @@
 
 <script>
 
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import commonSyncElements from 'kolibri.coreVue.mixins.commonSyncElements';
-  import { SelectDeviceModalGroup, RadioButtonGroup } from 'kolibri.coreVue.componentSets.sync';
-  import ImmersivePage from 'kolibri.coreVue.components.ImmersivePage';
-  import BottomAppBar from 'kolibri.coreVue.components.BottomAppBar';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import commonSyncElements from 'kolibri-common/mixins/commonSyncElements';
+  import SelectDeviceModalGroup from 'kolibri-common/components/syncComponentSet/SelectDeviceModalGroup';
+  import RadioButtonGroup from 'kolibri-common/components/syncComponentSet/RadioButtonGroup';
+  import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
+  import BottomAppBar from 'kolibri/components/BottomAppBar';
 
   import commonDeviceStrings from '../../../views/commonDeviceStrings';
 

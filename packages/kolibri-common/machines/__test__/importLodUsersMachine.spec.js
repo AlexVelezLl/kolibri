@@ -1,5 +1,5 @@
 import { interpret } from 'xstate';
-import { LodTypePresets } from 'kolibri.coreVue.vuex.constants';
+import { LodTypePresets } from 'kolibri/constants';
 import { getImportLodUsersMachine } from '../importLodUsersMachine';
 
 describe('importLodUsersMachine', () => {

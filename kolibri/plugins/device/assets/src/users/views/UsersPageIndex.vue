@@ -15,9 +15,9 @@
   import Lockr from 'lockr';
   import { mapGetters } from 'vuex';
   import { interpret } from 'xstate';
-  import commonCoreStrings from 'kolibri.coreVue.mixins.commonCoreStrings';
-  import NotificationsRoot from 'kolibri.coreVue.components.NotificationsRoot';
-  import { getImportLodUsersMachine } from 'kolibri.machines.importLodUsersMachine';
+  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import NotificationsRoot from 'kolibri/components/pages/NotificationsRoot';
+  import { getImportLodUsersMachine } from 'kolibri-common/machines/importLodUsersMachine';
 
   export default {
     name: 'UsersPageIndex',

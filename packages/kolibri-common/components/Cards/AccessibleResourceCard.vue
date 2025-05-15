@@ -139,8 +139,8 @@
   }
 
   /* Override KTextTruncator's use of break-word to avoid
-     the description text breaking weirdly on long words
-     which results in the card being too wide */
+   the description text breaking weirdly on long words
+   which results in the card being too wide */
   /deep/ .truncator {
     span {
       overflow-wrap: anywhere !important;

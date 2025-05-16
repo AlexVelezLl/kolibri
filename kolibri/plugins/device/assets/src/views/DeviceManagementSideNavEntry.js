@@ -30,6 +30,13 @@ registerNavItem({
         condition: get(isSuperuser) && !get(isLearnerOnlyImport),
       },
       {
+        label: coreStrings.$tr('usersLabel'),
+        route: baseRoutes.users.path,
+        icon: 'audience',
+        name: baseRoutes.users.name,
+        condition: get(isSuperuser),
+      },
+      {
         label: deviceString('permissionsLabel'),
         route: baseRoutes.permissions.path,
         icon: 'facility',

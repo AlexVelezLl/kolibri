@@ -73,9 +73,9 @@
   import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
   import SelectDeviceModalGroup from 'kolibri-common/components/syncComponentSet/SelectDeviceModalGroup';
   import { LodTypePresets } from 'kolibri/constants';
-  import commonDeviceStrings from '../../views/commonDeviceStrings';
+  import commonDeviceStrings from '../commonDeviceStrings';
 
-  import useUsers from '../composables/useUsers';
+  import useLODDeviceUsers from './composables/useLODDeviceUsers';
   import UsersList from './UsersList.vue';
 
   export default {
@@ -94,7 +94,7 @@
         users,
         loading,
         showCannotRemoveUser,
-      } = useUsers();
+      } = useLODDeviceUsers();
 
       fetchUsers();
 

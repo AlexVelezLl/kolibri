@@ -118,7 +118,7 @@
   import CatchErrors from 'kolibri/utils/CatchErrors';
   import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
   import commonProfileStrings from '../../../../../../user_profile/assets/src/views/commonProfileStrings';
-  import commonDeviceStrings from '../../../views/commonDeviceStrings';
+  import commonDeviceStrings from '../../commonDeviceStrings';
 
   export default {
     name: 'ImportUserWithCredentials',

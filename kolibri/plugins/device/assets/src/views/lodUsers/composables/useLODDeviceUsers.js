@@ -4,7 +4,7 @@ import { getCurrentInstance, ref, inject, onMounted } from 'vue';
 import TaskResource from 'kolibri/apiResources/TaskResource';
 import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
 import { TaskStatuses } from 'kolibri-common/utils/syncTaskUtils';
-import { deviceString } from '../../views/commonDeviceStrings';
+import { deviceString } from '../../commonDeviceStrings';
 
 const isPooling = ref(false);
 const usersBeingImportedRef = ref([]);

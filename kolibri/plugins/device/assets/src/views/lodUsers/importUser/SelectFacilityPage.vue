@@ -63,7 +63,7 @@
   import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
   import BottomAppBar from 'kolibri/components/BottomAppBar';
 
-  import commonDeviceStrings from '../../../views/commonDeviceStrings';
+  import commonDeviceStrings from '../../commonDeviceStrings';
 
   export default {
     name: 'SelectFacility',

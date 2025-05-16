@@ -19,6 +19,10 @@ import ManageTasksPage from '../views/ManageTasksPage';
 import NewChannelVersionPage from '../views/ManageContentPage/NewChannelVersionPage';
 import RearrangeChannelsPage from '../views/RearrangeChannelsPage';
 import UserPermissionsPage from '../views/UserPermissionsPage';
+import UsersRootPage from '../views/lodUsers/UsersRootPage.vue';
+import SelectFacilityPage from '../views/lodUsers/importUser/SelectFacilityPage.vue';
+import ImportUserAsAdminPage from '../views/lodUsers/importUser/ImportUserAsAdminPage.vue';
+import ImportUserWithCredentialsPage from '../views/lodUsers/importUser/ImportUserWithCredentialsPage.vue';
 import withAuthMessage from '../views/withAuthMessage';
 import { PageNames } from '../constants';
 import wizardTransitionRoutes from './wizardTransitionRoutes';
@@ -181,6 +185,26 @@ const routes = [
     path: '/content/manage_channel/:channel_id/upgrade',
     component: withAuthMessage(NewChannelVersionPage, 'contentManager'),
     handler: defaultHandler,
+  },
+  {
+    name: PageNames.USERS_ROOT,
+    path: '/users',
+    component: UsersRootPage,
+  },
+  {
+    path: '/users/import/select_facility',
+    name: PageNames.USERS_SELECT_FACILITY_FOR_IMPORT,
+    component: SelectFacilityPage,
+  },
+  {
+    path: '/users/import/credentials',
+    name: PageNames.USERS_IMPORT_USER_WITH_CREDENTIALS,
+    component: ImportUserWithCredentialsPage,
+  },
+  {
+    path: '/users/import/as_admin',
+    name: PageNames.USERS_IMPORT_USER_AS_ADMIN,
+    component: ImportUserAsAdminPage,
   },
   ...wizardTransitionRoutes,
   {

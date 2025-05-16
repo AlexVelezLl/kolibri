@@ -34,9 +34,9 @@
   import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
   import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
   import TaskResource from 'kolibri/apiResources/TaskResource';
-  import commonDeviceStrings from '../../../views/commonDeviceStrings';
+  import commonDeviceStrings from '../../commonDeviceStrings';
   import UsersList from '../UsersList.vue';
-  import useUsers from '../../composables/useUsers';
+  import useLODDeviceUsers from '../composables/useLODDeviceUsers';
 
   export default {
     name: 'ImportUserAsAdmin',
@@ -47,7 +47,8 @@
     },
     mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
-      const { users, loading, startPollingTasks, fetchUsers, usersBeingImportedRef } = useUsers();
+      const { users, loading, startPollingTasks, fetchUsers, usersBeingImportedRef } =
+        useLODDeviceUsers();
 
       fetchUsers();
 

@@ -190,21 +190,25 @@ const routes = [
     name: PageNames.USERS_ROOT,
     path: '/users',
     component: UsersRootPage,
+    handler: defaultHandler,
   },
   {
     path: '/users/import/select_facility',
     name: PageNames.USERS_SELECT_FACILITY_FOR_IMPORT,
     component: SelectFacilityPage,
+    handler: defaultHandler,
   },
   {
     path: '/users/import/credentials',
     name: PageNames.USERS_IMPORT_USER_WITH_CREDENTIALS,
     component: ImportUserWithCredentialsPage,
+    handler: defaultHandler,
   },
   {
     path: '/users/import/as_admin',
     name: PageNames.USERS_IMPORT_USER_AS_ADMIN,
     component: ImportUserAsAdminPage,
+    handler: defaultHandler,
   },
   ...wizardTransitionRoutes,
   {

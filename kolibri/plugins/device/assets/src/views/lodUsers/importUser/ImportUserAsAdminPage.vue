@@ -4,7 +4,7 @@
     :primary="false"
     :appBarTitle="deviceString('importUserLabel')"
     :loading="usersLoading || taskLoading"
-    @navIconClick="importUserService.send('RESET_IMPORT')"
+    @navIconClick="importLodMachineService.send('RESET_IMPORT')"
   >
     <KPageContainer class="device-container">
       <h1>{{ $tr('selectAUser') }}</h1>
@@ -36,19 +36,24 @@
   import TaskResource from 'kolibri/apiResources/TaskResource';
   import commonDeviceStrings from '../../commonDeviceStrings';
   import UsersList from '../UsersList.vue';
-  import useLODDeviceUsers from '../composables/useLODDeviceUsers';
+  import useLodDeviceUsers from '../composables/useLodDeviceUsers';
 
   export default {
     name: 'ImportUserAsAdmin',
-    inject: ['importUserService'],
     components: {
       UsersList,
       ImmersivePage,
     },
     mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
-      const { users, loading, startPollingTasks, fetchUsers, usersBeingImportedRef } =
-        useLODDeviceUsers();
+      const {
+        users,
+        loading,
+        startPollingTasks,
+        fetchUsers,
+        usersBeingImportedRef,
+        importLodMachineService,
+      } = useLodDeviceUsers();
 
       fetchUsers();
 
@@ -56,6 +61,7 @@
         localUsers: users,
         usersLoading: loading,
         usersBeingImportedRef,
+        importLodMachineService,
         startPollingTasks,
       };
     },
@@ -66,13 +72,13 @@
     },
     computed: {
       remoteUsers() {
-        return this.importUserService.state.context.remoteUsers;
+        return this.importLodMachineService.state.context.remoteUsers;
       },
       facility() {
-        return this.importUserService.state.context.selectedFacility;
+        return this.importLodMachineService.state.context.selectedFacility;
       },
       deviceId() {
-        return this.importUserService.state.context.importDeviceId;
+        return this.importLodMachineService.state.context.importDeviceId;
       },
       usersList() {
         return this.remoteUsers.map(user => ({
@@ -89,7 +95,7 @@
         const task_name = 'kolibri.core.auth.tasks.peeruserimport';
         const params = {
           type: task_name,
-          ...this.importUserService.state.context.remoteAdmin,
+          ...this.importLodMachineService.state.context.remoteAdmin,
           facility: this.facility.id,
           facility_name: this.facility.name,
           device_id: this.deviceId,
@@ -99,7 +105,7 @@
         this.taskLoading = true;
         try {
           const result = await TaskResource.startTask(params);
-          this.importUserService.send({
+          this.importLodMachineService.send({
             type: 'ADD_USER_BEING_IMPORTED',
             value: {
               id: learner.id,
@@ -108,7 +114,7 @@
               taskId: result.id,
             },
           });
-          this.importUserService.send({
+          this.importLodMachineService.send({
             type: 'RESET_IMPORT',
           });
           this.startPollingTasks();

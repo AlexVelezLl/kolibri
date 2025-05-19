@@ -75,7 +75,7 @@
   import { LodTypePresets } from 'kolibri/constants';
   import commonDeviceStrings from '../commonDeviceStrings';
 
-  import useLODDeviceUsers from './composables/useLODDeviceUsers';
+  import useLodDeviceUsers from './composables/useLodDeviceUsers';
   import UsersList from './UsersList.vue';
 
   export default {
@@ -94,7 +94,8 @@
         users,
         loading,
         showCannotRemoveUser,
-      } = useLODDeviceUsers();
+        importLodMachineService,
+      } = useLodDeviceUsers();
 
       fetchUsers();
 
@@ -103,11 +104,11 @@
         loading,
         usersBeingImportedRef,
         showCannotRemoveUser,
+        importLodMachineService,
         fetchUsers,
         removeUser,
       };
     },
-    inject: ['importUserService'],
     data() {
       return {
         userIdToRemove: null,
@@ -138,7 +139,7 @@
       },
 
       handleSelectDeviceSubmit(device) {
-        this.importUserService.send({
+        this.importLodMachineService.send({
           type: 'CONTINUE',
           value: {
             importOrJoin: LodTypePresets.IMPORT,

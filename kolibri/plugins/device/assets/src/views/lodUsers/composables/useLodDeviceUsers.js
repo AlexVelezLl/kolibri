@@ -1,10 +1,20 @@
-import UserType from 'kolibri-common/utils/userType';
+import Lockr from 'lockr';
+import { interpret } from 'xstate';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router/composables';
+
 import { UserKinds } from 'kolibri/constants';
-import { getCurrentInstance, ref, inject, onMounted } from 'vue';
+import UserType from 'kolibri-common/utils/userType';
+import useSnackbar from 'kolibri/composables/useSnackbar';
 import TaskResource from 'kolibri/apiResources/TaskResource';
-import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
 import { TaskStatuses } from 'kolibri-common/utils/syncTaskUtils';
+import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
+import { getImportLodUsersMachine } from 'kolibri-common/machines/importLodUsersMachine';
+
 import { deviceString } from '../../commonDeviceStrings';
+import { PageNames } from '../../../constants';
+
+const SAVED_STATE_KEY = 'lodUsersImportSavedState';
 
 const isPooling = ref(false);
 const usersBeingImportedRef = ref([]);
@@ -12,9 +22,61 @@ const users = ref([]);
 const loading = ref(true);
 const showCannotRemoveUser = ref(false);
 
-export default function useUsers() {
-  const store = getCurrentInstance().proxy.$store;
-  const importUserService = inject('importUserService') || {};
+let importLodMachineService = null;
+
+const setupImportLodMachineService = ({ router, route }) => {
+  const DeviceRouteNamesMap = {
+    LOD_SETUP_TYPE: PageNames.USERS_ROOT,
+    LOD_SELECT_FACILITY: PageNames.USERS_SELECT_FACILITY_FOR_IMPORT,
+    LOD_IMPORT_USER_AUTH: PageNames.USERS_IMPORT_USER_WITH_CREDENTIALS,
+    LOD_IMPORT_AS_ADMIN: PageNames.USERS_IMPORT_USER_AS_ADMIN,
+  };
+
+  const synchronizeRouteAndMachine = state => {
+    if (!state) return;
+    const { meta } = state;
+    // Dump out of here if there is nothing to resume from
+    if (!Object.keys(meta).length) {
+      router.replace('/');
+      return;
+    }
+
+    const machineRoute = meta[Object.keys(meta)[0]].route;
+    if (machineRoute && DeviceRouteNamesMap[machineRoute.name]) {
+      const newRoute = {
+        name: DeviceRouteNamesMap[machineRoute.name],
+      };
+
+      // Avoid redundant navigation
+      if (route.name !== newRoute.name) {
+        router.replace(newRoute);
+      }
+    } else {
+      router.replace(PageNames.USERS_ROOT);
+    }
+  };
+
+  const savedState = Lockr.get(SAVED_STATE_KEY, null);
+  if (savedState) {
+    synchronizeRouteAndMachine(savedState);
+  }
+
+  importLodMachineService = interpret(getImportLodUsersMachine());
+  importLodMachineService.start(savedState);
+  importLodMachineService.onTransition(state => {
+    synchronizeRouteAndMachine(state);
+    Lockr.set(SAVED_STATE_KEY, importLodMachineService._state);
+  });
+};
+
+export default function useLodDeviceUsers() {
+  const route = useRoute();
+  const router = useRouter();
+  const { createSnackbar } = useSnackbar();
+
+  if (!importLodMachineService) {
+    setupImportLodMachineService({ route, router });
+  }
 
   async function fetchUsers({ force } = {}) {
     loading.value = true;
@@ -25,7 +87,6 @@ export default function useUsers() {
       user.kind = UserType(user);
     });
     users.value = response;
-    store.dispatch('notLoading');
     loading.value = false;
   }
 
@@ -44,7 +105,7 @@ export default function useUsers() {
   }
 
   const getUsersBeingImported = () => {
-    const { context: { usersBeingImported = [] } = {} } = importUserService.state || {};
+    const { context: { usersBeingImported = [] } = {} } = importLodMachineService.state || {};
     return usersBeingImported;
   };
 
@@ -77,13 +138,13 @@ export default function useUsers() {
         return;
       }
       if (task.status === TaskStatuses.FAILED) {
-        store.dispatch('createSnackbar', deviceString('importUserError'));
+        createSnackbar(deviceString('importUserError'));
       }
       if (task.status === TaskStatuses.COMPLETED) {
-        store.dispatch('createSnackbar', deviceString('importUserSuccess'));
+        createSnackbar(deviceString('importUserSuccess'));
       }
       if ([TaskStatuses.COMPLETED, TaskStatuses.FAILED].includes(task.status)) {
-        importUserService.send({
+        importLodMachineService.send({
           type: 'REMOVE_USER_BEING_IMPORTED',
           value: user.id,
         });
@@ -106,6 +167,7 @@ export default function useUsers() {
     loading,
     showCannotRemoveUser,
     usersBeingImportedRef,
+    importLodMachineService,
     startPollingTasks,
     fetchUsers,
     removeUser,

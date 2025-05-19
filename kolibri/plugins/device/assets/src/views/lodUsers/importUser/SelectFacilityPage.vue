@@ -4,7 +4,7 @@
     :appBarTitle="deviceString('importUserLabel')"
     :primary="false"
     :loading="loading"
-    @navIconClick="importUserService.send('RESET_IMPORT')"
+    @navIconClick="importLodMachineService.send('RESET_IMPORT')"
   >
     <KPageContainer class="device-container">
       <div v-if="!loading">
@@ -64,6 +64,7 @@
   import BottomAppBar from 'kolibri/components/BottomAppBar';
 
   import commonDeviceStrings from '../../commonDeviceStrings';
+  import useLodDeviceUsers from '../composables/useLodDeviceUsers';
 
   export default {
     name: 'SelectFacility',
@@ -73,8 +74,13 @@
       RadioButtonGroup,
       SelectDeviceModalGroup,
     },
-    inject: ['importUserService'],
     mixins: [commonCoreStrings, commonSyncElements, commonDeviceStrings],
+    setup() {
+      const { importLodMachineService } = useLodDeviceUsers();
+      return {
+        importLodMachineService,
+      };
+    },
     data() {
       return {
         // Need to initialize to non-empty string to fix #7595
@@ -88,7 +94,7 @@
     },
     computed: {
       importDeviceId() {
-        return this.importUserService.state.context.importDeviceId;
+        return this.importLodMachineService.state.context.importDeviceId;
       },
       selectedFacility() {
         return this.facilities.find(f => f.id === this.selectedFacilityId);
@@ -120,7 +126,7 @@
         this.fetchNetworkLocation(address.id).then(() => (this.showSelectAddressModal = false));
       },
       handleContinue() {
-        this.importUserService.send({
+        this.importLodMachineService.send({
           type: 'CONTINUE',
           value: {
             selectedFacility: this.selectedFacility,

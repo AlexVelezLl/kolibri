@@ -4,7 +4,7 @@
     :primary="false"
     :appBarTitle="deviceString('importUserLabel')"
     :loading="loadingNewAddress"
-    @navIconClick="importUserService.send('RESET_IMPORT')"
+    @navIconClick="importLodMachineService.send('RESET_IMPORT')"
   >
     <KPageContainer class="device-container">
       <KCircularLoader v-if="!facility" />
@@ -119,6 +119,7 @@
   import ImmersivePage from 'kolibri/components/pages/ImmersivePage';
   import commonProfileStrings from '../../../../../../user_profile/assets/src/views/commonProfileStrings';
   import commonDeviceStrings from '../../commonDeviceStrings';
+  import useLodDeviceUsers from '../composables/useLodDeviceUsers';
 
   export default {
     name: 'ImportUserWithCredentials',
@@ -128,6 +129,12 @@
       PasswordTextbox,
     },
     mixins: [commonSyncElements, commonCoreStrings, commonProfileStrings, commonDeviceStrings],
+    setup() {
+      const { importLodMachineService } = useLodDeviceUsers();
+      return {
+        importLodMachineService,
+      };
+    },
     data() {
       return {
         username: '',
@@ -147,10 +154,9 @@
         shouldValidate: false,
       };
     },
-    inject: ['importUserService'],
     computed: {
       deviceId() {
-        return this.importUserService.state.context.importDeviceId;
+        return this.importLodMachineService.state.context.importDeviceId;
       },
       facility() {
         return this.facilities.find(f => f.id === this.selectedFacilityId);
@@ -197,7 +203,7 @@
       });
     },
     mounted() {
-      this.selectedFacilityId = this.importUserService.state.context.selectedFacility.id;
+      this.selectedFacilityId = this.importLodMachineService.state.context.selectedFacility.id;
     },
     methods: {
       fetchNetworkLocation(deviceId) {
@@ -254,7 +260,7 @@
         try {
           const response = await TaskResource.startTask(params);
           const { user_id: userId, username } = response.extra_metadata;
-          this.importUserService.send({
+          this.importLodMachineService.send({
             type: 'ADD_USER_BEING_IMPORTED',
             value: {
               id: userId,
@@ -263,7 +269,7 @@
               taskId: response.id,
             },
           });
-          this.importUserService.send({
+          this.importLodMachineService.send({
             type: 'RESET_IMPORT',
           });
         } catch (error) {
@@ -318,7 +324,7 @@
         };
         FacilityUserResource.listRemoteFacilityLearners(params)
           .then(data => {
-            this.importUserService.send({
+            this.importLodMachineService.send({
               type: 'CONTINUEADMIN',
               value: {
                 adminUsername: this.adminUsername,

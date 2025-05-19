@@ -14,7 +14,7 @@ export default {
     path: '/facilities',
   },
   users: {
-    name: PageNames.USERS_PAGE,
+    name: PageNames.USERS_ROOT,
     path: '/users',
   },
   info: {

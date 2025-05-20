@@ -176,11 +176,7 @@ export const getImportLodUsersDefinition = () => ({
       value: event.value,
     })),
     addImportedUser: assign({
-      importedUsers: (ctx, event) => {
-        const users = ctx.importedUsers;
-        users.push(event.value);
-        return uniq(users);
-      },
+      importedUsers: (ctx, event) => uniq([...ctx.importedUsers, event.value]),
     }),
     // TODO: There are a lot of logic and several actions of the original wizard machine
     // that does pretty much the same thing. This could be refactored to abstract actions
@@ -189,11 +185,7 @@ export const getImportLodUsersDefinition = () => ({
       firstImportedLodUser: (_, event) => event.value,
     }),
     addUserBeingImported: assign({
-      usersBeingImported: (ctx, event) => {
-        const users = ctx.usersBeingImported;
-        users.push(event.value);
-        return uniq(users);
-      },
+      usersBeingImported: (ctx, event) => uniq([...ctx.usersBeingImported, event.value]),
     }),
     removeUserBeingImported: assign({
       usersBeingImported: (ctx, event) => {

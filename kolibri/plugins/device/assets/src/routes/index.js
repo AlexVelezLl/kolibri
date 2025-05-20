@@ -1,4 +1,5 @@
 import store from 'kolibri/store';
+import router from 'kolibri/router';
 import ManageSyncSchedule from 'kolibri-common/components/SyncSchedule/ManageSyncSchedule';
 import EditDeviceSyncSchedule from 'kolibri-common/components/SyncSchedule/EditDeviceSyncSchedule';
 import useUser from 'kolibri/composables/useUser';
@@ -34,6 +35,16 @@ function hideLoadingScreen() {
 function defaultHandler(toRoute) {
   store.dispatch('preparePage', { name: toRoute.name });
   hideLoadingScreen();
+}
+
+function lodGuard(toRoute) {
+  const { isLearnerOnlyImport } = useUser();
+  if (!get(isLearnerOnlyImport)) {
+    return router.replace({
+      name: PageNames.MANAGE_CONTENT_PAGE,
+    });
+  }
+  defaultHandler(toRoute);
 }
 
 const routes = [
@@ -189,26 +200,26 @@ const routes = [
   {
     name: PageNames.USERS_ROOT,
     path: '/users',
-    component: UsersRootPage,
-    handler: defaultHandler,
+    component: withAuthMessage(UsersRootPage, 'superuser'),
+    handler: lodGuard,
   },
   {
     path: '/users/import/select_facility',
     name: PageNames.USERS_SELECT_FACILITY_FOR_IMPORT,
-    component: SelectFacilityPage,
-    handler: defaultHandler,
+    component: withAuthMessage(SelectFacilityPage, 'superuser'),
+    handler: lodGuard,
   },
   {
     path: '/users/import/credentials',
     name: PageNames.USERS_IMPORT_USER_WITH_CREDENTIALS,
-    component: ImportUserWithCredentialsPage,
-    handler: defaultHandler,
+    component: withAuthMessage(ImportUserWithCredentialsPage, 'superuser'),
+    handler: lodGuard,
   },
   {
     path: '/users/import/as_admin',
     name: PageNames.USERS_IMPORT_USER_AS_ADMIN,
-    component: ImportUserAsAdminPage,
-    handler: defaultHandler,
+    component: withAuthMessage(ImportUserAsAdminPage, 'superuser'),
+    handler: lodGuard,
   },
   ...wizardTransitionRoutes,
   {

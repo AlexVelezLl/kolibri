@@ -34,7 +34,7 @@ registerNavItem({
         route: baseRoutes.users.path,
         icon: 'audience',
         name: baseRoutes.users.name,
-        condition: get(isSuperuser),
+        condition: get(isSuperuser) && get(isLearnerOnlyImport),
       },
       {
         label: deviceString('permissionsLabel'),

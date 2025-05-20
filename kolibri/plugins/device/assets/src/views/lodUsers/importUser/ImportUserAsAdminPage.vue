@@ -72,7 +72,7 @@
     },
     computed: {
       remoteUsers() {
-        return this.importLodMachineService.state.context.remoteUsers;
+        return this.importLodMachineService.state.context.remoteUsers || [];
       },
       facility() {
         return this.importLodMachineService.state.context.selectedFacility;

@@ -45,6 +45,7 @@
         <KButton
           :text="coreString('continueAction')"
           :primary="true"
+          :disabled="loading || !selectedFacility"
           @click="handleContinue"
         />
       </BottomAppBar>
@@ -83,7 +84,6 @@
     },
     data() {
       return {
-        // Need to initialize to non-empty string to fix #7595
         loading: true,
         selectedFacilityId: 'selectedFacilityId',
         facilities: [],

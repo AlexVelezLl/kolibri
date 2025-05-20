@@ -1,5 +1,6 @@
 import Lockr from 'lockr';
-import { interpret } from 'xstate';
+import store from 'kolibri/store';
+import { State, interpret } from 'xstate';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router/composables';
 
@@ -56,7 +57,8 @@ const setupImportLodMachineService = ({ router, route }) => {
     }
   };
 
-  const savedState = Lockr.get(SAVED_STATE_KEY, null);
+  const savedStateObject = Lockr.get(SAVED_STATE_KEY, null);
+  const savedState = savedStateObject ? State.create(savedStateObject) : null;
   if (savedState) {
     synchronizeRouteAndMachine(savedState);
   }
@@ -65,7 +67,7 @@ const setupImportLodMachineService = ({ router, route }) => {
   importLodMachineService.start(savedState);
   importLodMachineService.onTransition(state => {
     synchronizeRouteAndMachine(state);
-    Lockr.set(SAVED_STATE_KEY, importLodMachineService._state);
+    Lockr.set(SAVED_STATE_KEY, state);
   });
 };
 
@@ -80,13 +82,20 @@ export default function useLodDeviceUsers() {
 
   async function fetchUsers({ force } = {}) {
     loading.value = true;
-    const response = await FacilityUserResource.fetchCollection({
-      force,
-    });
-    response.forEach(user => {
-      user.kind = UserType(user);
-    });
-    users.value = response;
+
+    try {
+      const response = await FacilityUserResource.fetchCollection({
+        force,
+      });
+      loading.value = false;
+      response.forEach(user => {
+        user.kind = UserType(user);
+      });
+      users.value = response;
+    } catch (error) {
+      store.dispatch('handleApiError', { error });
+    }
+
     loading.value = false;
   }
 
@@ -102,6 +111,10 @@ export default function useLodDeviceUsers() {
     }
 
     return FacilityUserResource.removeImportedUser(userId);
+  }
+
+  function resetShowCannotRemoveUser() {
+    showCannotRemoveUser.value = false;
   }
 
   const getUsersBeingImported = () => {
@@ -171,5 +184,6 @@ export default function useLodDeviceUsers() {
     startPollingTasks,
     fetchUsers,
     removeUser,
+    resetShowCannotRemoveUser,
   };
 }

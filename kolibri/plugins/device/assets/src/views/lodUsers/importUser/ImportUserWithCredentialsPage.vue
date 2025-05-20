@@ -187,8 +187,8 @@
           return '';
         }
         if (
-          !this.useAdmin & (this.username.trim() === '') ||
-          this.useAdmin & (this.adminUsername === null || this.adminUsername.trim() === '')
+          (!this.useAdmin && this.username.trim() === '') ||
+          (this.useAdmin && (this.adminUsername === null || this.adminUsername.trim() === ''))
         ) {
           return this.coreString('requiredFieldError');
         }

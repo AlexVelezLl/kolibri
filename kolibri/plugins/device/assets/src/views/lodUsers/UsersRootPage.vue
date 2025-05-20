@@ -45,14 +45,13 @@
       v-if="showCannotRemoveUser"
       :title="$tr('cannotRemoveUserTitle')"
       :submitText="coreString('closeAction')"
-      @submit="showCannotRemoveUser = false"
+      @submit="resetShowCannotRemoveUser"
     >
       <p>
         {{ $tr('cannotRemoveUserDescription') }}
       </p>
       <KExternalLink
         :text="$tr('editPermissionsAction')"
-        appearance="link"
         :href="genExternalEditPermissions()"
       />
     </KModal>
@@ -88,13 +87,14 @@
     mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
       const {
-        fetchUsers,
-        removeUser,
-        usersBeingImportedRef,
         users,
         loading,
         showCannotRemoveUser,
+        usersBeingImportedRef,
         importLodMachineService,
+        fetchUsers,
+        removeUser,
+        resetShowCannotRemoveUser,
       } = useLodDeviceUsers();
 
       fetchUsers();
@@ -107,6 +107,7 @@
         importLodMachineService,
         fetchUsers,
         removeUser,
+        resetShowCannotRemoveUser,
       };
     },
     data() {

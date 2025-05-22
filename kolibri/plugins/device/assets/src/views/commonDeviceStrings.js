@@ -79,6 +79,14 @@ const deviceStrings = createTranslator('CommonDeviceStrings', {
     message: 'Successfully imported user',
     context: 'Success message when importing a user is successful.',
   },
+  removeUserSuccess: {
+    message: 'Successfully removed user',
+    context: 'Success message when removing a user is successful.',
+  },
+  removeUserError: {
+    message: 'Error removing user',
+    context: 'Error message when removing a user fails.',
+  },
 });
 
 /**

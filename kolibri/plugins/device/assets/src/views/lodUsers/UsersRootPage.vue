@@ -53,6 +53,7 @@
       <KExternalLink
         :text="$tr('editPermissionsAction')"
         :href="genExternalEditPermissions()"
+        class="fix-link-line-height"
       />
     </KModal>
     <SelectDeviceModalGroup
@@ -89,8 +90,8 @@
       const {
         users,
         loading,
+        usersBeingImported,
         showCannotRemoveUser,
-        usersBeingImportedRef,
         importLodMachineService,
         fetchUsers,
         removeUser,
@@ -102,7 +103,7 @@
       return {
         users,
         loading,
-        usersBeingImportedRef,
+        usersBeingImported,
         showCannotRemoveUser,
         importLodMachineService,
         fetchUsers,
@@ -120,7 +121,7 @@
       usersList() {
         return [
           ...this.users,
-          ...this.usersBeingImportedRef.map(user => ({
+          ...this.usersBeingImported.map(user => ({
             ...user,
             isImporting: true,
           })),
@@ -130,10 +131,11 @@
     methods: {
       async onRemoveUser(userId) {
         try {
-          await this.removeUser(userId);
+          const success = await this.removeUser(userId);
           this.userIdToRemove = null;
-          this.$store.dispatch('createSnackbar', this.$tr('removeUserSuccess'));
-          await this.fetchUsers({ force: true });
+          if (success) {
+            await this.fetchUsers({ force: true });
+          }
         } catch (error) {
           this.userIdToRemove = null;
         }
@@ -164,7 +166,6 @@
       removeUserCallToAction:
         'Please ensure that all data you would like to keep has been synced before removing this user. You will permanently lose any data that has not been synced.',
       removeUserAction: 'Remove user',
-      removeUserSuccess: 'Successfully removed user',
       editPermissionsAction: 'Edit admin permissions',
       cannotRemoveUserTitle: 'Cannot remove user',
       cannotRemoveUserDescription:
@@ -181,6 +182,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .fix-link-line-height {
+    // Override default global line-height of 1.15 which is not enough
+    // space for links and makes scrollbar appear in their parent containers.
+    line-height: 1.5;
   }
 
 </style>

@@ -46,23 +46,16 @@
     },
     mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
-      const {
-        users,
-        loading,
-        startPollingTasks,
-        fetchUsers,
-        usersBeingImportedRef,
-        importLodMachineService,
-      } = useLodDeviceUsers();
+      const { users, loading, fetchUsers, usersBeingImported, importLodMachineService } =
+        useLodDeviceUsers();
 
       fetchUsers();
 
       return {
         localUsers: users,
         usersLoading: loading,
-        usersBeingImportedRef,
+        usersBeingImported,
         importLodMachineService,
-        startPollingTasks,
       };
     },
     data: () => {
@@ -84,9 +77,7 @@
         return this.remoteUsers.map(user => ({
           ...user,
           isImported: this.localUsers.some(localUser => localUser.id === user.id),
-          isImporting: this.usersBeingImportedRef.some(
-            importingUser => importingUser.id === user.id,
-          ),
+          isImporting: this.usersBeingImported.some(importingUser => importingUser.id === user.id),
         }));
       },
     },
@@ -117,7 +108,6 @@
           this.importLodMachineService.send({
             type: 'RESET_IMPORT',
           });
-          this.startPollingTasks();
         } catch (error) {
           this.$store.dispatch('createSnackbar', this.deviceString('importUserError'));
         }

@@ -1,7 +1,7 @@
 import Lockr from 'lockr';
 import store from 'kolibri/store';
 import { State, interpret } from 'xstate';
-import { ref, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router/composables';
 
 import { UserKinds } from 'kolibri/constants';
@@ -9,6 +9,7 @@ import UserType from 'kolibri-common/utils/userType';
 import useSnackbar from 'kolibri/composables/useSnackbar';
 import TaskResource from 'kolibri/apiResources/TaskResource';
 import { TaskStatuses } from 'kolibri-common/utils/syncTaskUtils';
+import useTaskPolling from 'kolibri-common/composables/useTaskPolling';
 import FacilityUserResource from 'kolibri-common/apiResources/FacilityUserResource';
 import { getImportLodUsersMachine } from 'kolibri-common/machines/importLodUsersMachine';
 
@@ -17,11 +18,11 @@ import { PageNames } from '../../../constants';
 
 const SAVED_STATE_KEY = 'lodUsersImportSavedState';
 
-const isPooling = ref(false);
-const usersBeingImportedRef = ref([]);
+const importLodMachineState = ref(null);
 const users = ref([]);
 const loading = ref(true);
 const showCannotRemoveUser = ref(false);
+const { tasks } = useTaskPolling('soud_sync');
 
 let importLodMachineService = null;
 
@@ -66,6 +67,7 @@ const setupImportLodMachineService = ({ router, route }) => {
   importLodMachineService = interpret(getImportLodUsersMachine());
   importLodMachineService.start(savedState);
   importLodMachineService.onTransition(state => {
+    importLodMachineState.value = state;
     synchronizeRouteAndMachine(state);
     Lockr.set(SAVED_STATE_KEY, state);
   });
@@ -79,6 +81,11 @@ export default function useLodDeviceUsers() {
   if (!importLodMachineService) {
     setupImportLodMachineService({ route, router });
   }
+
+  const usersBeingImported = computed(() => {
+    const { context: { usersBeingImported = [] } = {} } = importLodMachineState.value || {};
+    return usersBeingImported;
+  });
 
   async function fetchUsers({ force } = {}) {
     loading.value = true;
@@ -99,7 +106,7 @@ export default function useLodDeviceUsers() {
     loading.value = false;
   }
 
-  function removeUser(userId) {
+  async function removeUser(userId) {
     const user = users.value.find(user => user.id === userId);
     if (!user) return;
     if (
@@ -110,78 +117,55 @@ export default function useLodDeviceUsers() {
       throw new Error('Cannot remove the last super admin');
     }
 
-    return FacilityUserResource.removeImportedUser(userId);
+    try {
+      await FacilityUserResource.removeImportedUser(userId);
+      createSnackbar(deviceString('removeUserSuccess'));
+      return true;
+    } catch (error) {
+      createSnackbar(deviceString('removeUserError'));
+      return false;
+    }
   }
 
   function resetShowCannotRemoveUser() {
     showCannotRemoveUser.value = false;
   }
 
-  const getUsersBeingImported = () => {
-    const { context: { usersBeingImported = [] } = {} } = importLodMachineService.state || {};
-    return usersBeingImported;
-  };
-
-  const startPollingTasks = () => {
-    if (isPooling.value) {
-      // Already polling
-      return;
-    }
-    pollImportTask();
-  };
-
-  const pollImportTask = async () => {
-    const usersBeingImported = getUsersBeingImported();
-    usersBeingImportedRef.value = usersBeingImported;
-    if (usersBeingImported.length === 0) {
-      isPooling.value = false;
+  watch(tasks, () => {
+    if (!usersBeingImported.value?.length || !tasks.value?.length) {
       return;
     }
 
-    isPooling.value = true;
-    const tasks = await TaskResource.list({ queue: 'soud_sync' });
-    const tasksMap = {};
-    tasks.forEach(task => {
-      tasksMap[task.extra_metadata.user_id] = task;
-    });
-
-    usersBeingImported.forEach(async user => {
-      const task = tasksMap[user.id];
+    usersBeingImported.value.forEach(user => {
+      const task = tasks.value.find(task => task.extra_metadata.user_id === user.id);
       if (!task) {
         return;
       }
+
       if (task.status === TaskStatuses.FAILED) {
         createSnackbar(deviceString('importUserError'));
       }
       if (task.status === TaskStatuses.COMPLETED) {
         createSnackbar(deviceString('importUserSuccess'));
       }
+
       if ([TaskStatuses.COMPLETED, TaskStatuses.FAILED].includes(task.status)) {
         importLodMachineService.send({
           type: 'REMOVE_USER_BEING_IMPORTED',
           value: user.id,
         });
-        usersBeingImportedRef.value = getUsersBeingImported();
-        await TaskResource.clear(task.id);
         fetchUsers({ force: true });
+        TaskResource.clear(task.id);
       }
     });
-    setTimeout(() => {
-      pollImportTask();
-    }, 2000);
-  };
-
-  onMounted(() => {
-    startPollingTasks();
   });
 
   return {
     users,
     loading,
+    usersBeingImported,
     showCannotRemoveUser,
-    usersBeingImportedRef,
     importLodMachineService,
-    startPollingTasks,
     fetchUsers,
     removeUser,
     resetShowCannotRemoveUser,

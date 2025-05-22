@@ -43,7 +43,7 @@
                   marginRight: '4px',
                 }"
               />
-              <span :style="annotationStyle"> Super admin</span>
+              <span :style="annotationStyle"> {{ superAdminLabel$() }}</span>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@
           marginTop: '32px',
         }"
       >
-        {{ coreString('noResultsLabel') }}
+        {{ noResultsLabel$() }}
       </p>
     </div>
   </div>
@@ -84,16 +84,50 @@
 
 <script>
 
+  import { computed, ref, toRefs } from 'vue';
   import { UserKinds } from 'kolibri/constants';
   import FilterTextbox from 'kolibri/components/FilterTextbox';
-  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import { themeTokens } from 'kolibri-design-system/lib/styles/theme';
+  import { coreStrings } from 'kolibri/uiText/commonCoreStrings';
 
   export default {
     name: 'UsersList',
     components: {
       FilterTextbox,
     },
-    mixins: [commonCoreStrings],
+    setup(props) {
+      const searchQuery = ref('');
+      const { users } = toRefs(props);
+
+      const annotationStyle = {
+        fontSize: '12px',
+        color: themeTokens().annotation,
+      };
+
+      const filteredUsers = computed(() => {
+        return users.value.filter(user => {
+          return (
+            user.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+            user.full_name.toLowerCase().includes(searchQuery.value.toLowerCase())
+          );
+        });
+      });
+
+      const isSuperuser = user => {
+        return user.kind === UserKinds.SUPERUSER;
+      };
+
+      const { noResultsLabel$, superAdminLabel$ } = coreStrings;
+
+      return {
+        searchQuery,
+        filteredUsers,
+        annotationStyle,
+        isSuperuser,
+        noResultsLabel$,
+        superAdminLabel$,
+      };
+    },
     props: {
       users: {
         type: Array,
@@ -102,32 +136,6 @@
       isSearchable: {
         type: Boolean,
         default: false,
-      },
-    },
-    data() {
-      return {
-        searchQuery: '',
-      };
-    },
-    computed: {
-      annotationStyle() {
-        return {
-          fontSize: '12px',
-          color: this.$themeTokens.annotation,
-        };
-      },
-      filteredUsers() {
-        return this.users.filter(user => {
-          return (
-            user.username.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            user.full_name.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-        });
-      },
-    },
-    methods: {
-      isSuperuser(user) {
-        return user.kind === UserKinds.SUPERUSER;
       },
     },
     $trs: {

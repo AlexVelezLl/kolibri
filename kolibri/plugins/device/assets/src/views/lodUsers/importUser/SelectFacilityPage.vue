@@ -77,8 +77,9 @@
     },
     mixins: [commonCoreStrings, commonSyncElements, commonDeviceStrings],
     setup() {
-      const { importLodMachineService } = useLodDeviceUsers();
+      const { importLodMachineService, importLodMachineState } = useLodDeviceUsers();
       return {
+        importLodMachineState,
         importLodMachineService,
       };
     },
@@ -94,7 +95,7 @@
     },
     computed: {
       importDeviceId() {
-        return this.importLodMachineService.state.context.importDeviceId;
+        return this.importLodMachineState.context.importDeviceId;
       },
       selectedFacility() {
         return this.facilities.find(f => f.id === this.selectedFacilityId);

@@ -130,8 +130,9 @@
     },
     mixins: [commonSyncElements, commonCoreStrings, commonProfileStrings, commonDeviceStrings],
     setup() {
-      const { importLodMachineService } = useLodDeviceUsers();
+      const { importLodMachineService, importLodMachineState } = useLodDeviceUsers();
       return {
+        importLodMachineState,
         importLodMachineService,
       };
     },
@@ -156,7 +157,7 @@
     },
     computed: {
       deviceId() {
-        return this.importLodMachineService.state.context.importDeviceId;
+        return this.importLodMachineState.context.importDeviceId;
       },
       facility() {
         return this.facilities.find(f => f.id === this.selectedFacilityId);
@@ -203,7 +204,7 @@
       });
     },
     mounted() {
-      this.selectedFacilityId = this.importLodMachineService.state.context.selectedFacility.id;
+      this.selectedFacilityId = this.importLodMachineState.context.selectedFacility.id;
     },
     methods: {
       fetchNetworkLocation(deviceId) {
@@ -282,7 +283,7 @@
             ERROR_CONSTANTS.INVALID_USERNAME,
           ]);
 
-          const errorData = error.response.data;
+          const errorData = error.response?.data || [];
 
           if (errorsCaught) {
             this.error = true;

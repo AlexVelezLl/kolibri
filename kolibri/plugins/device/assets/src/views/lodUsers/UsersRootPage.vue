@@ -1,14 +1,14 @@
 <template>
 
   <AppBarPage
-    :title="coreString('usersLabel')"
+    :title="usersLabel$()"
     class="users-page"
   >
     <KPageContainer>
       <div class="header">
-        <h1>{{ coreString('usersLabel') }}</h1>
+        <h1>{{ usersLabel$() }}</h1>
         <KButton
-          :text="deviceString('importUserLabel')"
+          :text="importUserLabel$()"
           @click="showSelectDevice = true"
         />
       </div>
@@ -19,7 +19,7 @@
       >
         <template #action="{ user }">
           <KButton
-            :text="coreString('removeAction')"
+            :text="removeAction$()"
             appearance="flat-button"
             @click="userIdToRemove = user.id"
           />
@@ -30,7 +30,7 @@
       v-if="userIdToRemove"
       :title="$tr('removeUserTitle')"
       :submitText="$tr('removeUserAction')"
-      :cancelText="coreString('cancelAction')"
+      :cancelText="cancelAction$()"
       @submit="onRemoveUser(userIdToRemove)"
       @cancel="userIdToRemove = null"
     >
@@ -44,7 +44,7 @@
     <KModal
       v-if="showCannotRemoveUser"
       :title="$tr('cannotRemoveUserTitle')"
-      :submitText="coreString('closeAction')"
+      :submitText="closeAction$()"
       @submit="resetShowCannotRemoveUser"
     >
       <p>
@@ -52,7 +52,7 @@
       </p>
       <KExternalLink
         :text="$tr('editPermissionsAction')"
-        :href="genExternalEditPermissions()"
+        :href="getExternalEditPermissionsPath()"
         class="fix-link-line-height"
       />
     </KModal>
@@ -69,11 +69,12 @@
 
 <script>
 
+  import { computed, ref } from 'vue';
   import AppBarPage from 'kolibri/components/pages/AppBarPage';
-  import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
+  import { coreStrings } from 'kolibri/uiText/commonCoreStrings';
   import SelectDeviceModalGroup from 'kolibri-common/components/syncComponentSet/SelectDeviceModalGroup';
   import { LodTypePresets } from 'kolibri/constants';
-  import commonDeviceStrings from '../commonDeviceStrings';
+  import { deviceStrings } from '../commonDeviceStrings';
 
   import useLodDeviceUsers from './composables/useLodDeviceUsers';
   import UsersList from './UsersList.vue';
@@ -85,8 +86,10 @@
       AppBarPage,
       SelectDeviceModalGroup,
     },
-    mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
+      const userIdToRemove = ref(null);
+      const showSelectDevice = ref(false);
+
       const {
         users,
         loading,
@@ -98,66 +101,64 @@
         resetShowCannotRemoveUser,
       } = useLodDeviceUsers();
 
-      fetchUsers();
+      const usersList = computed(() => [
+        ...users.value,
+        ...usersBeingImported.value.map(user => ({
+          ...user,
+          isImporting: true,
+        })),
+      ]);
 
-      return {
-        users,
-        loading,
-        usersBeingImported,
-        showCannotRemoveUser,
-        importLodMachineService,
-        fetchUsers,
-        removeUser,
-        resetShowCannotRemoveUser,
-      };
-    },
-    data() {
-      return {
-        userIdToRemove: null,
-        showSelectDevice: false,
-      };
-    },
-    computed: {
-      usersList() {
-        return [
-          ...this.users,
-          ...this.usersBeingImported.map(user => ({
-            ...user,
-            isImporting: true,
-          })),
-        ];
-      },
-    },
-    methods: {
-      async onRemoveUser(userId) {
+      const onRemoveUser = async userId => {
         try {
-          const success = await this.removeUser(userId);
-          this.userIdToRemove = null;
+          const success = await removeUser(userId);
+          userIdToRemove.value = null;
           if (success) {
-            await this.fetchUsers({ force: true });
+            await fetchUsers({ force: true });
           }
         } catch (error) {
-          this.userIdToRemove = null;
+          userIdToRemove.value = null;
         }
-      },
+      };
 
-      handleSelectDeviceSubmit(device) {
-        this.importLodMachineService.send({
+      const handleSelectDeviceSubmit = device => {
+        importLodMachineService.send({
           type: 'CONTINUE',
           value: {
             importOrJoin: LodTypePresets.IMPORT,
             importDeviceId: device.id,
           },
         });
-      },
+      };
 
-      genExternalEditPermissions() {
+      const getExternalEditPermissionsPath = () => {
         const pathname = window.location.pathname;
         const deviceIndex = pathname.indexOf('/device');
         const base = pathname.slice(0, deviceIndex) + '/device/#';
-        const path = '/permissions';
-        return base + path;
-      },
+        return base + '/permissions';
+      };
+
+      fetchUsers();
+
+      const { usersLabel$, closeAction$, removeAction$, cancelAction$ } = coreStrings;
+      const { importUserLabel$ } = deviceStrings;
+
+      return {
+        usersList,
+        loading,
+        userIdToRemove,
+        showSelectDevice,
+        showCannotRemoveUser,
+        onRemoveUser,
+        handleSelectDeviceSubmit,
+        resetShowCannotRemoveUser,
+        getExternalEditPermissionsPath,
+        usersLabel$,
+        closeAction$,
+        removeAction$,
+        cancelAction$,
+        importUserLabel$,
+      };
     },
     $trs: {
       removeUserTitle: 'Remove user',

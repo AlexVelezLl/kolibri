@@ -165,6 +165,7 @@ export default function useLodDeviceUsers() {
     loading,
     usersBeingImported,
     showCannotRemoveUser,
+    importLodMachineState,
     importLodMachineService,
     fetchUsers,
     removeUser,

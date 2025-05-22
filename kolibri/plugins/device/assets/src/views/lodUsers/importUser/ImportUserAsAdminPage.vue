@@ -46,8 +46,14 @@
     },
     mixins: [commonCoreStrings, commonDeviceStrings],
     setup() {
-      const { users, loading, fetchUsers, usersBeingImported, importLodMachineService } =
-        useLodDeviceUsers();
+      const {
+        users,
+        loading,
+        fetchUsers,
+        usersBeingImported,
+        importLodMachineState,
+        importLodMachineService,
+      } = useLodDeviceUsers();
 
       fetchUsers();
 
@@ -55,6 +61,7 @@
         localUsers: users,
         usersLoading: loading,
         usersBeingImported,
+        importLodMachineState,
         importLodMachineService,
       };
     },
@@ -65,13 +72,13 @@
     },
     computed: {
       remoteUsers() {
-        return this.importLodMachineService.state.context.remoteUsers || [];
+        return this.importLodMachineState.context.remoteUsers || [];
       },
       facility() {
-        return this.importLodMachineService.state.context.selectedFacility;
+        return this.importLodMachineState.context.selectedFacility;
       },
       deviceId() {
-        return this.importLodMachineService.state.context.importDeviceId;
+        return this.importLodMachineState.context.importDeviceId;
       },
       usersList() {
         return this.remoteUsers.map(user => ({
@@ -86,7 +93,7 @@
         const task_name = 'kolibri.core.auth.tasks.peeruserimport';
         const params = {
           type: task_name,
-          ...this.importLodMachineService.state.context.remoteAdmin,
+          ...this.importLodMachineState.context.remoteAdmin,
           facility: this.facility.id,
           facility_name: this.facility.name,
           device_id: this.deviceId,

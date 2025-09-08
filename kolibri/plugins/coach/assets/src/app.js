@@ -52,9 +52,9 @@ class CoachToolsModule extends KolibriApp {
   }
   ready() {
     const { snackbarIsVisible, clearSnackbar } = useSnackbar();
-    const { isLearnerOnlyImport, isSuperuser } = useUser();
+    const user = useUser();
     router.beforeEach((to, from, next) => {
-      if (get(isLearnerOnlyImport)) {
+      if (get(user.isLearnerOnlyImport)) {
         redirectBrowser();
         return;
       }
@@ -163,7 +163,7 @@ class CoachToolsModule extends KolibriApp {
         promises.push(this.store.dispatch('initClassInfo', to.params.classId));
       }
 
-      if (get(isSuperuser) && facilities.value.length === 0) {
+      if (get(user.isSuperuser) && facilities.value.length === 0) {
         promises.push(getFacilities().catch(() => {}));
       }
 

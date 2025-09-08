@@ -267,14 +267,7 @@
       const store = currentInstance.$store;
       const router = currentInstance.$router;
       const { tourActive, isTourActive, startTour, endTour } = useTour();
-      const {
-        isUserLoggedIn,
-        isCoach,
-        isAdmin,
-        isSuperuser,
-        canManageContent,
-        isLearnerOnlyImport,
-      } = useUser();
+      const user = useUser();
       const { allowDownloadOnMeteredConnection } = useDeviceSettings();
       const {
         searchTerms,
@@ -311,14 +304,14 @@
       const rootNodesLoading = ref(false);
 
       function _showChannels(channels, baseurl) {
-        if (get(isUserLoggedIn) && !baseurl) {
+        if (get(user.isLoggedIn) && !baseurl) {
           fetchResumableContentNodes();
         }
         const shouldResolve = samePageCheckGenerator(store);
         return ContentNodeResource.fetchCollection({
           getParams: {
             parent__isnull: true,
-            include_coach_content: get(isAdmin) || get(isCoach) || get(isSuperuser),
+            include_coach_content: get(user.isAdmin) || get(user.isCoach) || get(user.isSuperuser),
             baseurl,
           },
         }).then(
@@ -433,9 +426,9 @@
         back,
         rootNodesLoading,
         rootNodes,
-        isUserLoggedIn,
-        canManageContent,
-        isLearnerOnlyImport,
+        isUserLoggedIn: user.isLoggedIn,
+        canManageContent: user.canManageContent,
+        isLearnerOnlyImport: user.isLearnerOnlyImport,
         tourActive,
         isTourActive,
         startTour,

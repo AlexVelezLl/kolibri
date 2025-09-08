@@ -39,8 +39,8 @@ function defaultHandler(toRoute) {
 }
 
 function lodGuard(toRoute) {
-  const { isLearnerOnlyImport } = useUser();
-  if (!get(isLearnerOnlyImport)) {
+  const user = useUser();
+  if (!get(user.isLearnerOnlyImport)) {
     return router.replace({
       name: PageNames.MANAGE_CONTENT_PAGE,
     });
@@ -102,8 +102,8 @@ const routes = [
     component: withAuthMessage(ManageSyncSchedule, 'superuser'),
     path: '/facilities/:facilityId/managesync',
     props: route => {
-      const { userFacilityId } = useUser();
-      const facilityId = route.params.facilityId || get(userFacilityId);
+      const user = useUser();
+      const facilityId = route.params.facilityId || get(user.facilityId);
       return {
         goBackRoute: { name: PageNames.FACILITIES_PAGE },
         facilityId,
@@ -124,10 +124,10 @@ const routes = [
     component: withAuthMessage(EditDeviceSyncSchedule, 'superuser'),
     path: '/facilities/:device_id/:facilityId/editdevice',
     props: route => {
-      const { userFacilityId } = useUser();
+      const user = useUser();
       return {
         goBackRoute: { name: PageNames.MANAGE_SYNC_SCHEDULE },
-        facilityId: route.params.facilityId || get(userFacilityId),
+        facilityId: route.params.facilityId || get(user.facilityId),
         deviceId: route.params.device_id,
       };
     },

@@ -8,21 +8,21 @@ export function updateUserProfile(store, { updates }) {
     return Promise.resolve();
   }
 
-  const { currentUserId, setSession } = useUser();
+  const user = useUser();
 
   return FacilityUserResource.saveModel({
-    id: get(currentUserId),
+    id: get(user.id),
     data: updates,
     exists: true,
   }).then(() => {
-    setSession({ session: updates });
+    user.setSession({ session: updates });
   });
 }
 
 export function updateUserProfilePassword(store, password) {
-  const { currentUserId } = useUser();
+  const user = useUser();
   return FacilityUserResource.saveModel({
-    id: get(currentUserId),
+    id: get(user.id),
     data: { password },
     exists: true,
   });

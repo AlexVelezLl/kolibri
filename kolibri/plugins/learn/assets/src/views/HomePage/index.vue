@@ -108,7 +108,7 @@
       const store = currentInstance.$store;
       const router = currentInstance.$router;
 
-      const { isUserLoggedIn } = useUser();
+      const user = useUser();
       const { canAccessUnassignedContent } = useDeviceSettings();
       const { localChannelsCache, fetchChannels } = useChannels();
       const {
@@ -123,12 +123,12 @@
 
       const continueLearningFromClasses = computed(
         () =>
-          (get(isUserLoggedIn) && get(resumableClassesQuizzes).length > 0) ||
+          (get(user.isLoggedIn) && get(resumableClassesQuizzes).length > 0) ||
           get(resumableClassesResources).length > 0,
       );
       const continueLearningOnYourOwn = computed(
         () =>
-          get(isUserLoggedIn) &&
+          get(user.isLoggedIn) &&
           get(learnerFinishedAllClasses) &&
           get(canAccessUnassignedContent) &&
           get(resumableContentNodes).length > 0,
@@ -140,11 +140,11 @@
 
       const hasActiveClassesLessons = computed(
         () =>
-          get(isUserLoggedIn) && get(activeClassesLessons) && get(activeClassesLessons).length > 0,
+          get(user.isLoggedIn) && get(activeClassesLessons) && get(activeClassesLessons).length > 0,
       );
       const hasActiveClassesQuizzes = computed(
         () =>
-          get(isUserLoggedIn) && get(activeClassesQuizzes) && get(activeClassesQuizzes).length > 0,
+          get(user.isLoggedIn) && get(activeClassesQuizzes) && get(activeClassesQuizzes).length > 0,
       );
       const hasChannels = computed(() => {
         return get(localChannelsCache).length > 0;
@@ -152,13 +152,13 @@
       const displayExploreChannels = computed(() => {
         return (
           get(hasChannels) &&
-          (!get(isUserLoggedIn) ||
+          (!get(user.isLoggedIn) ||
             (get(learnerFinishedAllClasses) && get(canAccessUnassignedContent)))
         );
       });
 
       const displayClasses = computed(() => {
-        return get(isUserLoggedIn) && (get(classes).length || !get(canAccessUnassignedContent));
+        return get(user.isLoggedIn) && (get(classes).length || !get(canAccessUnassignedContent));
       });
 
       const missingResources = computed(() => {

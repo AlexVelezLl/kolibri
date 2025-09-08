@@ -140,9 +140,9 @@
     },
     mixins: [commonCoreStrings],
     setup() {
-      const { currentUserId } = useUser();
+      const user = useUser();
       const { facilities } = useFacilities();
-      return { currentUserId, facilities };
+      return { currentUserId: user.id, facilities };
     },
     data() {
       return {

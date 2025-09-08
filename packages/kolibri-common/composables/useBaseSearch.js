@@ -177,7 +177,7 @@ export default function useBaseSearch({
   const more = ref(null);
   const labels = ref(null);
 
-  const { isAdmin, isCoach, isSuperuser, isUserLoggedIn } = useUser();
+  const user = useUser();
 
   const searchTerms = computed({
     get() {
@@ -242,7 +242,7 @@ export default function useBaseSearch({
 
   function createBaseSearchGetParams() {
     const getParams = {
-      include_coach_content: get(isAdmin) || get(isCoach) || get(isSuperuser),
+      include_coach_content: get(user.isAdmin) || get(user.isCoach) || get(user.isSuperuser),
       baseurl: get(baseurl),
     };
     if (filters) {
@@ -291,7 +291,7 @@ export default function useBaseSearch({
       set(searchResultsLoading, true);
       const getParams = createSearchGetParams();
       getParams.max_results = 25;
-      if (get(isUserLoggedIn)) {
+      if (get(user.isLoggedIn)) {
         fetchContentNodeProgress?.(getParams);
       }
 
@@ -323,7 +323,7 @@ export default function useBaseSearch({
     if (get(displayingSearchResults) && get(more) && !get(moreLoading)) {
       set(moreLoading, true);
       set(scopedLabelsLoading, true);
-      if (get(isUserLoggedIn)) {
+      if (get(user.isLoggedIn)) {
         fetchContentNodeProgress?.(get(more));
       }
       return ContentNodeResource.fetchCollection({ getParams: get(more) }).then(data => {

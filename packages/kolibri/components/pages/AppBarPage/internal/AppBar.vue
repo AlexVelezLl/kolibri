@@ -170,7 +170,7 @@
       const $route = computed(() => store.state.route);
       const { windowIsSmall } = useKResponsiveWindow();
       const { topBarHeight, navItems } = useNav();
-      const { isLearner, isUserLoggedIn, username, full_name } = useUser();
+      const { isLearner, isLoggedIn: isUserLoggedIn, username, fullName } = useUser();
       const { totalPoints, fetchPoints } = useTotalProgress();
       const links = computed(() => {
         const currentItem = get(navItems).find(nc => nc.url === window.location.pathname);
@@ -193,7 +193,7 @@
         isUserLoggedIn,
         isLearner,
         username,
-        fullName: full_name,
+        fullName,
         totalPoints,
         fetchPoints,
       };

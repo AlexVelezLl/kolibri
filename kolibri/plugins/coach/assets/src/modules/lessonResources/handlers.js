@@ -9,9 +9,9 @@ const { getFacilities, facilities } = useFacilities();
 export async function showLessonResourceContentPreview(store, params) {
   const { classId, lessonId, contentId } = params;
   const initClassInfoPromise = store.dispatch('initClassInfo', classId);
-  const { isSuperuser } = useUser();
+  const user = useUser();
   const getFacilitiesPromise =
-    get(isSuperuser) && get(facilities).length === 0
+    get(user.isSuperuser) && get(facilities).length === 0
       ? getFacilities().catch(() => {})
       : Promise.resolve();
 

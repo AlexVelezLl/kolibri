@@ -332,16 +332,16 @@
         isSuperuser,
         isAdmin,
         isCoach,
-        isUserLoggedIn,
+        isLoggedIn: isUserLoggedIn,
         isLearnerOnlyImport,
         username,
-        full_name,
+        fullName,
       } = useUser();
       const { status, lastSynced } = useUserSyncStatus();
       const { topBarHeight, navItems } = useNav();
       const { startTour, tourActive, isTourActive, endTour } = useTour();
       return {
-        fullName: full_name,
+        fullName,
         username,
         topBarHeight,
         windowIsLarge,

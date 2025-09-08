@@ -25,11 +25,11 @@ class LearnModule extends KolibriApp {
     // If we are not logged in and are forbidden from accessing as guest
     // redirect to CONTENT_UNAVAILABLE.
     router.beforeEach((to, from, next) => {
-      const { isUserLoggedIn } = useUser();
+      const user = useUser();
       if (
         to.name !== PageNames.CONTENT_UNAVAILABLE &&
         !this.store.state.allowGuestAccess &&
-        !get(isUserLoggedIn)
+        !get(user.isLoggedIn)
       ) {
         // Pass the ?next param on to AuthMessage
         const currentURL = window.encodeURIComponent(window.location.href);

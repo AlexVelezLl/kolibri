@@ -15,7 +15,7 @@
   export default {
     name: 'AttemptTextDiff',
     setup() {
-      const { currentUserId } = useUser();
+      const { id: currentUserId } = useUser();
       return { currentUserId };
     },
     props: {

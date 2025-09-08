@@ -376,7 +376,7 @@
       const { windowBreakpoint, windowIsLarge, windowIsSmall } = useKResponsiveWindow();
       const { channelsMap, fetchChannels } = useChannels();
       const { fetchContentNodeProgress, fetchContentNodeTreeProgress } = useContentNodeProgress();
-      const { isUserLoggedIn, isCoach, isAdmin, isSuperuser } = useUser();
+      const user = useUser();
       const { fetchUserDownloadRequests } = useDownloadRequests(store);
 
       const isRoot = ref(false);
@@ -399,7 +399,7 @@
       };
 
       const fetchRemoteBrowsingContentNodeUserData = topic => {
-        if (get(isUserLoggedIn) && props.deviceId) {
+        if (get(user.isLoggedIn) && props.deviceId) {
           const contentnode_id__in = _getAllDescendantChildren(topic);
           if (contentnode_id__in.length) {
             if (get(canAddDownloads)) {
@@ -432,10 +432,10 @@
         const route = currentRoute();
         const skip = route.query && route.query.skip === 'true';
         const params = {
-          include_coach_content: get(isAdmin) || get(isCoach) || get(isSuperuser),
+          include_coach_content: get(user.isAdmin) || get(user.isCoach) || get(user.isSuperuser),
           baseurl,
         };
-        if (get(isUserLoggedIn) && !baseurl) {
+        if (get(user.isLoggedIn) && !baseurl) {
           fetchContentNodeTreeProgress({ id, params });
         }
         return Promise.all([
@@ -547,7 +547,7 @@
         channel,
         topic,
         contents,
-        isUserLoggedIn,
+        isUserLoggedIn: user.isLoggedIn,
         fetchContentNodeTreeProgress,
         loading,
         sidePanelIsOpen,

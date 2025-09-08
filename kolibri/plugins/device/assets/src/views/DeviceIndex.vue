@@ -43,11 +43,11 @@
     },
     mixins: [commonCoreStrings],
     setup() {
-      const { isUserLoggedIn, userFacilityId } = useUser();
+      const user = useUser();
       const { facilities } = useFacilities();
       return {
-        isUserLoggedIn,
-        userFacilityId,
+        isUserLoggedIn: user.isLoggedIn,
+        userFacilityId: user.facilityId,
         facilities,
       };
     },

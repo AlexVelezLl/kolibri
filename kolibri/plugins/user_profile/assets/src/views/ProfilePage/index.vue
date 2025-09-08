@@ -46,7 +46,7 @@
             <td>
               <UserTypeDisplay
                 :distinguishCoachTypes="false"
-                :userType="getUserKind"
+                :userType="userKind"
               />
             </td>
           </tr>
@@ -186,7 +186,7 @@
 
   import NotificationsRoot from 'kolibri/components/pages/NotificationsRoot';
   import AppBarPage from 'kolibri/components/pages/AppBarPage';
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import find from 'lodash/find';
   import pickBy from 'lodash/pickBy';
   import commonCoreStrings from 'kolibri/uiText/commonCoreStrings';
@@ -224,29 +224,26 @@
       const showPasswordModal = ref(false);
       const showLearnModal = ref(false);
       const { currentUser } = useCurrentUser();
-      const {
-        isLearnerOnlyImport,
-        getUserKind,
-        getUserPermissions,
-        isCoach,
-        isSuperuser,
-        userHasPermissions,
-        userFacilityId,
-      } = useUser();
+
+      const user = useUser();
       const { onMyOwnSetup } = useOnMyOwnSetup();
       const { fetchPoints, totalPoints } = useTotalProgress();
       const { facilityConfig, facilities } = useFacilities();
 
+      const userPermissions = computed(() => {
+        return pickBy(user.permissions);
+      });
+
       return {
         currentUser,
         onMyOwnSetup,
-        isLearnerOnlyImport,
-        getUserKind,
-        getUserPermissions,
-        isCoach,
-        isSuperuser,
-        userHasPermissions,
-        userFacilityId,
+        isLearnerOnlyImport: user.isLearnerOnlyImport,
+        userKind: user.kind,
+        userPermissions,
+        isCoach: user.isCoach,
+        isSuperuser: user.isSuperuser,
+        userHasPermissions: user.hasPermissions,
+        userFacilityId: user.facilityId,
         showLearnModal,
         showPasswordModal,
         fetchPoints,
@@ -258,9 +255,6 @@
     computed: {
       profileEditRoute() {
         return this.$router.getRoute(RoutesMap.PROFILE_EDIT);
-      },
-      userPermissions() {
-        return pickBy(this.getUserPermissions);
       },
       facilityName() {
         const match = find(this.facilities, {

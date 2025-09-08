@@ -15,7 +15,7 @@ const roleToGetterMap = {
 // or AuthMessage, depending on whether a user has permissions.
 // TODO replace with nested views
 export default function withAuthMessage(component, authorizedRole) {
-  const useUserObject = useUser();
+  const user = useUser();
   const originalProps = component.props || [];
   const originalMethods = component.methods || [];
   return Vue.component('WithAuthMessage', {
@@ -31,7 +31,7 @@ export default function withAuthMessage(component, authorizedRole) {
       const getterName = roleToGetterMap[authorizedRole];
 
       if (getterName) {
-        const getter = useUserObject[getterName]?.value;
+        const getter = user[getterName]?.value;
         if (getter) {
           canAccess = () => getter;
         } else {

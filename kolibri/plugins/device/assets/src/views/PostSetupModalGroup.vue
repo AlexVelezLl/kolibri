@@ -68,12 +68,12 @@
     },
     mixins: [commonSyncElements],
     setup() {
-      const { isUserLoggedIn } = useUser();
+      const user = useUser();
       const { createSnackbar } = useSnackbar();
       const { facilities } = useFacilities();
 
       return {
-        isUserLoggedIn,
+        isUserLoggedIn: user.isLoggedIn,
         createSnackbar,
         facilities,
       };

@@ -354,7 +354,7 @@
         startTrackingProgress,
         stopTrackingProgress,
       } = useProgressTracking();
-      const { currentUserId } = useUser();
+      const { id: currentUserId } = useUser();
       const { windowBreakpoint, windowIsMedium, windowIsLarge, windowIsSmall } =
         useKResponsiveWindow();
       const { quizSectionsLabel$, questionsLabel$ } = enhancedQuizManagementStrings;

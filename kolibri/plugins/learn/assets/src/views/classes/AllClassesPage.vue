@@ -46,7 +46,7 @@
     },
     mixins: [commonCoreStrings, commonLearnStrings],
     setup() {
-      const { isUserLoggedIn } = useUser();
+      const { isLoggedIn: isUserLoggedIn } = useUser();
       return {
         isUserLoggedIn,
       };

@@ -156,7 +156,7 @@
         return Promise.resolve();
       };
       const { windowIsSmall } = useKResponsiveWindow();
-      const { isUserLoggedIn, currentUserId, full_name } = useUser();
+      const user = useUser();
       const { createSnackbar } = useSnackbar();
       return {
         errored,
@@ -172,9 +172,9 @@
         stopTracking: stopTrackingProgress,
         genContentLinkKeepCurrentBackLink,
         windowIsSmall,
-        isUserLoggedIn,
-        currentUserId,
-        full_name,
+        isUserLoggedIn: user.isLoggedIn,
+        currentUserId: user.id,
+        full_name: user.fullName,
         createSnackbar,
       };
     },

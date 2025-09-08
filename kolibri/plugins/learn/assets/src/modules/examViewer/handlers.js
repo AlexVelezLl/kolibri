@@ -15,9 +15,9 @@ export function showExam(store, params, alreadyOnQuiz) {
   }
   store.commit('SET_PAGE_NAME', ClassesPageNames.EXAM_VIEWER);
 
-  const { currentUserId } = useUser();
+  const user = useUser();
 
-  if (!get(currentUserId)) {
+  if (!get(user.id)) {
     store.commit('CORE_SET_ERROR', 'You must be logged in as a learner to view this page');
     store.commit('CORE_SET_PAGE_LOADING', false);
   } else {
@@ -38,13 +38,13 @@ export function showExam(store, params, alreadyOnQuiz) {
               // Seed based on the user ID so they see a consistent order each time.
               for (const section of question_sources) {
                 if (!section.learners_see_fixed_order) {
-                  section.questions = shuffled(section.questions, get(currentUserId));
+                  section.questions = shuffled(section.questions, get(user.id));
                 }
               }
               // When necessary randomize the order of the sections
               // Seed based on the user ID so they see a consistent order each time.
               if (!converted.learners_see_fixed_order) {
-                question_sources = shuffled(question_sources, get(currentUserId));
+                question_sources = shuffled(question_sources, get(user.id));
               }
               // If necessary, convert the question source info
               const allQuestions = question_sources.reduce((acc, section) => {

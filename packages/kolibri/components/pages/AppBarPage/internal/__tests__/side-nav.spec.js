@@ -25,7 +25,7 @@ function createWrapper({ navShown = true, headerHeight = 20, width = 100 } = {})
 }
 
 function setUserKind(userKind, isLearnerOnlyImport = false) {
-  const mockOverrides = { isLearnerOnlyImport, isUserLoggedIn: true, isLearner: false };
+  const mockOverrides = { isLearnerOnlyImport, isLoggedIn: true, isLearner: false };
   if (userKind == UserKinds.CAN_MANAGE_CONTENT) {
     mockOverrides.canManageContent = true;
     mockOverrides.isLearner = true;
@@ -38,7 +38,7 @@ function setUserKind(userKind, isLearnerOnlyImport = false) {
   } else if (userKind == UserKinds.SUPERUSER) {
     mockOverrides.isSuperuser = true;
   } else if (userKind == UserKinds.ANONYMOUS) {
-    mockOverrides.isUserLoggedIn = false;
+    mockOverrides.isLoggedIn = false;
   }
   useUser.mockImplementation(() => useUserMock(mockOverrides));
 }

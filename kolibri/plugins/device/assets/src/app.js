@@ -25,11 +25,11 @@ class DeviceManagementModule extends KolibriApp {
     return Cookies.get(IsPinAuthenticated) === 'true';
   }
   checkIfPinAuthenticationIsRequired(store, grantPluginAccess) {
-    const { isLearnerOnlyImport, isSuperuser, isFacilityAdmin, canManageContent } = useUser();
+    const user = useUser();
     if (
-      get(isLearnerOnlyImport) &&
-      !get(isFacilityAdmin) &&
-      (get(isSuperuser) || get(canManageContent))
+      get(user.isLearnerOnlyImport) &&
+      !get(user.isFacilityAdmin) &&
+      (get(user.isSuperuser) || get(user.canManageContent))
     ) {
       //While browsing within the device plugin, prevent expiry.
       //On page refresh within plugin, show pin prompt if cookie has expired.

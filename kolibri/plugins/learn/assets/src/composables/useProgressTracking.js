@@ -288,9 +288,9 @@ export default function useProgressTracking(store) {
       if (response.data.complete) {
         set(complete, true);
         set(progress_state, 1);
-        const { isUserLoggedIn } = useUser();
+        const user = useUser();
         const { incrementTotalProgress } = useTotalProgress();
-        if (get(isUserLoggedIn) && !wasComplete) {
+        if (get(user.isLoggedIn) && !wasComplete) {
           incrementTotalProgress(1);
         }
       }

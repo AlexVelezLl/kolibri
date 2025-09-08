@@ -130,7 +130,7 @@ export default function useDownloadRequests(store) {
     const data = {
       contentnode_id: contentNode.id,
       metadata,
-      source_id: useUser().currentUserId.value,
+      source_id: useUser().id.value,
       source_instance_id: get(instanceId),
       reason: 'USER_INITIATED',
       facility: store.getters.currentFacilityId,

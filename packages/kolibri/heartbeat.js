@@ -161,7 +161,7 @@ export class HeartBeat {
    * @return {Promise} promise that resolves when the endpoint check is complete.
    */
   _checkSession() {
-    const { sessionId, currentUserId, setSession } = useUser();
+    const user = useUser();
 
     // Record the current user id to check if a different one is returned by the server.
     if (!get(this._connection.connected)) {
@@ -190,7 +190,7 @@ export class HeartBeat {
         const session = response.data;
 
         // If our session is already defined, check the user id in the response
-        if (get(sessionId) && session.user_id !== get(currentUserId)) {
+        if (get(user.sessionId) && session.user_id !== get(user.id)) {
           if (session.user_id === null) {
             // If it is different, and the user_id is now null then our user has been signed out.
             return this.signOutDueToInactivity();
@@ -201,7 +201,7 @@ export class HeartBeat {
           }
         }
 
-        setSession({
+        user.setSession({
           session,
           // Calculate an approximation of the client 'now' that was simultaneous to the server
           // 'now' that was sent back with the request. We calculate this as the mean of the

@@ -36,11 +36,11 @@
   export default {
     name: 'TotalPoints',
     setup() {
-      const { currentUserId, isUserLoggedIn } = useUser();
+      const user = useUser();
       const { fetchPoints, totalPoints } = useTotalProgress();
       return {
-        currentUserId,
-        isUserLoggedIn,
+        currentUserId: user.id,
+        isUserLoggedIn: user.isLoggedIn,
         fetchPoints,
         totalPoints,
       };

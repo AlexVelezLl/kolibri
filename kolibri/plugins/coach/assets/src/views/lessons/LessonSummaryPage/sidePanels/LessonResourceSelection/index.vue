@@ -177,9 +177,9 @@
       });
 
       const defaultTitle = manageLessonResourcesTitle$();
-      const { isAppContext } = useUser();
+      const user = useUser();
       const isAppContextAndTouchDevice = computed(() => {
-        return isAppContext.value && isTouchDevice;
+        return user.isAppContext.value && isTouchDevice;
       });
 
       const selectedResourcesSize = computed(() => {

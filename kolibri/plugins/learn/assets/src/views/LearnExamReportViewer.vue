@@ -72,9 +72,9 @@
     },
     mixins: [commonCoreStrings],
     setup() {
-      const { full_name, currentUserId } = useUser();
+      const user = useUser();
       const { activeClassesQuizzes } = useLearnerResources();
-      return { userName: full_name, userId: currentUserId, activeClassesQuizzes };
+      return { userName: user.fullName, userId: user.id, activeClassesQuizzes };
     },
     computed: {
       ...mapState('examReportViewer', [

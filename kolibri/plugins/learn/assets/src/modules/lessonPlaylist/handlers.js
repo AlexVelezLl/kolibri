@@ -11,8 +11,8 @@ const { fetchContentNodeProgress } = useContentNodeProgress();
 export function showLessonPlaylist(store, { lessonId }) {
   return store.dispatch('loading').then(() => {
     // Only load contentnode progress if the user is logged in
-    const { isUserLoggedIn } = useUser();
-    if (get(isUserLoggedIn)) {
+    const user = useUser();
+    if (get(user.isLoggedIn)) {
       fetchContentNodeProgress({ lesson: lessonId });
     }
     const contentNodePromise = ContentNodeResource.fetchLessonResources(lessonId);

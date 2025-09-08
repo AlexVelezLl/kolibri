@@ -492,7 +492,7 @@ describe('useProgressTracking composable', () => {
     it('should update total progress if the backend returns complete and was not complete and user is logged in', async () => {
       const { updateContentSession } = await initStore();
       useUser.mockImplementation(() =>
-        useUserMock({ isUserLoggedIn: true, kind: [UserKinds.LEARNER] }),
+        useUserMock({ isLoggedIn: true, kind: [UserKinds.LEARNER] }),
       );
       set(totalProgressMock.totalProgress, 0);
       client.__setPayload({
@@ -512,7 +512,7 @@ describe('useProgressTracking composable', () => {
     it('should not update total progress if the backend returns complete and was already complete', async () => {
       const { updateContentSession } = await initStore({ complete: true });
       useUser.mockImplementation(() =>
-        useUserMock({ isUserLoggedIn: true, kind: [UserKinds.LEARNER] }),
+        useUserMock({ isLoggedIn: true, kind: [UserKinds.LEARNER] }),
       );
       set(totalProgressMock.totalProgress, 0);
       client.__setPayload({

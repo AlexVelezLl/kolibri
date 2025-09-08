@@ -38,16 +38,16 @@ export default {
   getters: {
     activeFacilityId(state, getters, rootState) {
       // Return either the facility_id param in the route module,
-      // or the userFacilityId value from core.session
+      // or the user.facilityId value from useUser()
 
-      // For multi-facility case, only use facility_id if in route because userFacilityId
+      // For multi-facility case, only use facility_id if in route because user.facilityId
       // fallback would always navigate to our default facility, not multi-facility landing page
-      const { userFacilityId } = useUser();
+      const user = useUser();
       const { userIsMultiFacilityAdmin } = useFacilities();
       if (userIsMultiFacilityAdmin.value) {
         return rootState.route.params.facility_id;
       }
-      return rootState.route.params.facility_id || get(userFacilityId);
+      return rootState.route.params.facility_id || get(user.facilityId);
     },
     facilityPageLinks(state, getters) {
       // Use this getter to get Link objects that have the optional 'facility_id'

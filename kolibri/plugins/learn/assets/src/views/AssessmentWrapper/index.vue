@@ -183,7 +183,7 @@
     mixins: [commonCoreStrings],
     setup() {
       const { windowIsSmall } = useKResponsiveWindow();
-      const { currentUserId } = useUser();
+      const { id: currentUserId } = useUser();
       return {
         windowIsSmall,
         currentUserId,

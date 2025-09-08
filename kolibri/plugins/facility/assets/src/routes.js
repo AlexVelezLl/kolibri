@@ -177,8 +177,8 @@ export default [
   {
     path: '/:facility_id?/managesync',
     props: route => {
-      const { userFacilityId } = useUser();
-      const facilityId = route.params.facility_id || get(userFacilityId);
+      const user = useUser();
+      const facilityId = route.params.facility_id || get(user.facilityId);
       return {
         facilityId,
         goBackRoute: {
@@ -204,9 +204,9 @@ export default [
     component: EditDeviceSyncSchedule,
     name: SyncPageNames.EDIT_SYNC_SCHEDULE,
     props: route => {
-      const { userFacilityId } = useUser();
+      const user = useUser();
       return {
-        facilityId: route.params.facility_id || get(userFacilityId),
+        facilityId: route.params.facility_id || get(user.facilityId),
         deviceId: route.params.deviceId,
         goBackRoute: {
           name: SyncPageNames.MANAGE_SYNC_SCHEDULE,

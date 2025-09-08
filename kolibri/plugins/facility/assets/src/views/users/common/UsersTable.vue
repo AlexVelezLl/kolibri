@@ -234,7 +234,7 @@
     setup(props, { emit, expose }) {
       const route = useRoute();
       const router = useRouter();
-      const { isSuperuser, currentUserId } = useUser();
+      const user = useUser();
       const currentInstance = getCurrentInstance();
       const $formatDate = currentInstance.proxy.$formatDate;
       const $formatRelative = currentInstance.proxy.$formatRelative;
@@ -548,7 +548,7 @@
       const userCanBeEdited = user => {
         // If logged-in user is a superuser, then they can edit anybody (including other SUs).
         // Otherwise, only non-SUs can be edited.
-        return isSuperuser.value || !user.is_superuser;
+        return user.isSuperuser.value || !user.is_superuser;
       };
 
       const getTranslatedSelectedArialabel = user => {
@@ -590,7 +590,7 @@
           {
             label: coreStrings.deleteAction$(),
             value: Modals.DELETE_USER,
-            disabled: userId === currentUserId.value,
+            disabled: userId === user.id.value,
           },
         ];
       };

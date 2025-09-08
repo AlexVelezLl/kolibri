@@ -127,14 +127,14 @@
     setup() {
       const { addDownloadRequest, downloadRequestMap, removeDownloadRequest } =
         useDownloadRequests();
-      const { isLearner, isUserLoggedIn } = useUser();
+      const user = useUser();
       const { tourActive, isTourActive, startTour, endTour } = useTour();
       return {
         addDownloadRequest,
         downloadRequestMap,
         removeDownloadRequest,
-        isLearner,
-        isUserLoggedIn,
+        isLearner: user.isLearner,
+        isUserLoggedIn: user.isLoggedIn,
         tourActive,
         isTourActive,
         startTour,

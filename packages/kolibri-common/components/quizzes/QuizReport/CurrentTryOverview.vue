@@ -118,7 +118,7 @@
     },
     mixins: [commonCoreStrings],
     setup() {
-      const { currentUserId } = useUser();
+      const { id: currentUserId } = useUser();
       return { currentUserId };
     },
     props: {

@@ -65,7 +65,7 @@
       UpdateNotification,
     },
     setup() {
-      const { isAdmin, isSuperuser, currentUserId } = useUser();
+      const { isAdmin, isSuperuser, id: currentUserId } = useUser();
 
       return {
         isAdmin,

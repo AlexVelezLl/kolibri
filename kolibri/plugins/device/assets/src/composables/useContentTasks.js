@@ -4,14 +4,14 @@ import useUser from 'kolibri/composables/useUser';
 
 export default function useContentTasks() {
   const $store = getCurrentInstance().proxy.$store;
-  const { canManageContent } = useUser();
+  const user = useUser();
 
   const polling = useTimeoutPoll(() => {
     return $store.dispatch('manageContent/refreshTaskList');
   }, 5000);
 
   function startTaskPolling() {
-    if (canManageContent.value) {
+    if (user.canManageContent.value) {
       polling.resume();
     }
   }

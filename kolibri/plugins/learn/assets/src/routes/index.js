@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const { channelsMap, fetchChannels } = useChannels();
-const { isUserLoggedIn } = useUser();
+const user = useUser();
 
 function unassignedContentGuard(next) {
   const { canAccessUnassignedContent } = store.getters;
@@ -43,7 +43,7 @@ export default [
     name: PageNames.ROOT,
     path: '/',
     redirect: () => {
-      if (get(isUserLoggedIn)) {
+      if (get(user.isLoggedIn)) {
         return { name: PageNames.HOME, replace: true };
       }
       return { name: PageNames.LIBRARY, replace: true };
@@ -54,7 +54,7 @@ export default [
     path: '/home',
     component: HomePage,
     handler(to, from, next) {
-      if (!get(isUserLoggedIn)) {
+      if (!get(user.isLoggedIn)) {
         next({ name: PageNames.LIBRARY, replace: true });
         return;
       }
@@ -75,7 +75,7 @@ export default [
       if (unassignedContentGuard(next)) {
         return;
       }
-      if (!get(isUserLoggedIn) && to.params.deviceId) {
+      if (!get(user.isLoggedIn) && to.params.deviceId) {
         next({ name: PageNames.LIBRARY, replace: true });
         return;
       }
@@ -175,7 +175,7 @@ export default [
       if (unassignedContentGuard(next)) {
         return;
       }
-      if (!get(isUserLoggedIn)) {
+      if (!get(user.isLoggedIn)) {
         next({ name: PageNames.LIBRARY, replace: true });
         return;
       }

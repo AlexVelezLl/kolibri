@@ -34,8 +34,8 @@ export default [
     name: 'PROFILE',
     component: ProfilePage,
     beforeEnter(to, from, next) {
-      const { isUserLoggedIn } = useUser();
-      if (!get(isUserLoggedIn)) {
+      const user = useUser();
+      if (!get(user.isLoggedIn)) {
         redirectBrowser();
       } else {
         preload(next);
@@ -47,8 +47,8 @@ export default [
     name: 'PROFILE_EDIT',
     component: ProfileEditPage,
     beforeEnter(to, from, next) {
-      const { isUserLoggedIn } = useUser();
-      if (!get(isUserLoggedIn)) {
+      const user = useUser();
+      if (!get(user.isLoggedIn)) {
         redirectBrowser();
       } else {
         preload(next);
@@ -61,8 +61,8 @@ export default [
     name: 'CHANGE_FACILITY',
     component: ChangeFacility,
     beforeEnter(to, from, next) {
-      const { isUserLoggedIn } = useUser();
-      if (!get(isUserLoggedIn)) {
+      const user = useUser();
+      if (!get(user.isLoggedIn)) {
         redirectBrowser();
       } else {
         preload(next);

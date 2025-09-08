@@ -17,7 +17,7 @@ export default function useCoreCoach(store) {
   const authorized = computed(() => store.getters.userIsAuthorizedForCoach);
   const classId = computed(() => get(route).params.classId);
   const groups = computed(() => store.getters['classSummary/groups']);
-  const { isSuperuser } = useUser();
+  const user = useUser();
   const { facilities } = useFacilities();
 
   function getAppBarTitle() {
@@ -25,7 +25,7 @@ export default function useCoreCoach(store) {
     // Using coachStrings.$tr() here because mixins are not applied
     // prior to props being processed.
     const { facility_id, name } = store.state.classSummary;
-    if (facility_id && get(facilities).length > 1 && get(isSuperuser)) {
+    if (facility_id && get(facilities).length > 1 && get(user.isSuperuser)) {
       const match = find(get(facilities), { id: facility_id }) || {};
       facilityName = match.name;
     }

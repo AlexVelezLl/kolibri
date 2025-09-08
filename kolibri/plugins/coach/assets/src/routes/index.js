@@ -20,11 +20,11 @@ import groupsRoutes from './groupsRoutes';
 
 function showHomePage(toRoute) {
   const initClassInfoPromise = store.dispatch('initClassInfo', toRoute.params.classId);
-  const { isSuperuser } = useUser();
+  const user = useUser();
   const { getFacilities, facilities } = useFacilities();
 
   const getFacilitiesPromise =
-    get(isSuperuser) && get(facilities).length === 0
+    get(user.isSuperuser) && get(facilities).length === 0
       ? getFacilities().catch(() => {})
       : Promise.resolve();
 
@@ -53,10 +53,10 @@ export default [
       // loading state is handled locally
       store.dispatch('notLoading');
       // if user only has access to one facility, facility_id will not be accessible from URL,
-      // but always defaulting to userFacilityId would cause problems for multi-facility admins
-      const { userFacilityId } = useUser();
+      // but always defaulting to user.facilityId would cause problems for multi-facility admins
+      const user = useUser();
       const { facilities, getFacilities, userIsMultiFacilityAdmin } = useFacilities();
-      const facilityId = toRoute.params.facility_id || get(userFacilityId);
+      const facilityId = toRoute.params.facility_id || get(user.facilityId);
 
       if (facilities.value.length === 0) {
         await getFacilities();

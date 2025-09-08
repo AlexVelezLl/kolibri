@@ -48,7 +48,7 @@
         startTrackingProgress,
         stopTrackingProgress,
       } = useProgressTracking();
-      const { currentUserId, full_name } = useUser();
+      const user = useUser();
       return {
         progress,
         time_spent,
@@ -60,8 +60,8 @@
         updateContentSession,
         startTracking: startTrackingProgress,
         stopTracking: stopTrackingProgress,
-        currentUserId,
-        full_name,
+        currentUserId: user.id,
+        fullName: user.fullName,
       };
     },
     props: {
@@ -103,7 +103,7 @@
           extraFields: this.extra_fields,
           progress: this.progress,
           userId: this.currentUserId,
-          userFullName: this.full_name,
+          userFullName: this.fullName,
           timeSpent: this.time_spent,
         };
       },
@@ -123,7 +123,7 @@
           extraFields: this.extra_fields,
           progress: this.progress,
           userId: this.currentUserId,
-          userFullName: this.full_name,
+          userFullName: this.fullName,
           timeSpent: this.time_spent,
           pastattempts: this.pastattempts,
           mastered: this.complete,

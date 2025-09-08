@@ -29,38 +29,38 @@ const sessionState = ref({ ...baseSessionState });
 export default function useUser() {
   // Session state
   const session = computed(() => sessionState.value);
-  const full_name = computed(() => sessionState.value.full_name);
+  const fullName = computed(() => sessionState.value.full_name);
   const sessionId = computed(() => sessionState.value.id);
-  const kind = computed(() => sessionState.value.kind);
+  const _kind = computed(() => sessionState.value.kind);
   const username = computed(() => sessionState.value.username);
 
   // Derived state
-  const isUserLoggedIn = computed(() => !kind.value.includes(UserKinds.ANONYMOUS));
-  const currentUserId = computed(() => sessionState.value.user_id);
+  const isLoggedIn = computed(() => !_kind.value.includes(UserKinds.ANONYMOUS));
+  const id = computed(() => sessionState.value.user_id);
   const isLearnerOnlyImport = computed(() => !sessionState.value.full_facility_import);
   const isCoach = computed(
-    () => kind.value.includes(UserKinds.COACH) || kind.value.includes(UserKinds.ASSIGNABLE_COACH),
+    () => _kind.value.includes(UserKinds.COACH) || _kind.value.includes(UserKinds.ASSIGNABLE_COACH),
   );
   const isAdmin = computed(
-    () => kind.value.includes(UserKinds.ADMIN) || kind.value.includes(UserKinds.SUPERUSER),
+    () => _kind.value.includes(UserKinds.ADMIN) || _kind.value.includes(UserKinds.SUPERUSER),
   );
-  const isSuperuser = computed(() => kind.value.includes(UserKinds.SUPERUSER));
+  const isSuperuser = computed(() => _kind.value.includes(UserKinds.SUPERUSER));
   const canManageContent = computed(() => sessionState.value.can_manage_content);
   const isAppContext = computed(() => sessionState.value.app_context);
-  const isClassCoach = computed(() => kind.value.includes(UserKinds.ASSIGNABLE_COACH));
-  const isFacilityCoach = computed(() => kind.value.includes(UserKinds.COACH));
-  const isLearner = computed(() => kind.value.includes(UserKinds.LEARNER));
-  const isFacilityAdmin = computed(() => kind.value.includes(UserKinds.ADMIN));
-  const getUserPermissions = computed(() => ({ can_manage_content: canManageContent.value }));
-  const userFacilityId = computed(() => sessionState.value.facility_id);
-  const getUserKind = computed(() => {
+  const isClassCoach = computed(() => _kind.value.includes(UserKinds.ASSIGNABLE_COACH));
+  const isFacilityCoach = computed(() => _kind.value.includes(UserKinds.COACH));
+  const isLearner = computed(() => _kind.value.includes(UserKinds.LEARNER));
+  const isFacilityAdmin = computed(() => _kind.value.includes(UserKinds.ADMIN));
+  const permissions = computed(() => ({ can_manage_content: canManageContent.value }));
+  const facilityId = computed(() => sessionState.value.facility_id);
+  const kind = computed(() => {
     if (isSuperuser.value) return UserKinds.SUPERUSER;
     if (isAdmin.value) return UserKinds.ADMIN;
     if (isCoach.value) return UserKinds.COACH;
     if (isLearner.value) return UserKinds.LEARNER;
     return UserKinds.ANONYMOUS;
   });
-  const userHasPermissions = computed(() => Object.values(getUserPermissions.value).some(Boolean));
+  const hasPermissions = computed(() => Object.values(permissions.value).some(Boolean));
 
   // Login/Logout Functions
   async function login(sessionPayload) {
@@ -131,8 +131,10 @@ export default function useUser() {
     // Getters
     session,
     isLearnerOnlyImport,
-    isUserLoggedIn,
-    currentUserId,
+    // prev: isUserLoggedIn,
+    isLoggedIn,
+    // prev: currentUserId,
+    id,
     isCoach,
     isAdmin,
     isSuperuser,
@@ -142,15 +144,19 @@ export default function useUser() {
     isFacilityCoach,
     isLearner,
     isFacilityAdmin,
-    getUserPermissions,
-    userFacilityId,
-    getUserKind,
-    userHasPermissions,
+    // prev: getUserPermissions,
+    permissions,
+    // prev: userFacilityId,
+    facilityId,
+    // prev: getUserKind
+    kind,
+    // prev: userHasPermissions,
+    hasPermissions,
 
     // State
-    full_name,
+    // prev: full_name,
+    fullName,
     sessionId,
-    kind,
     username,
 
     // Actions

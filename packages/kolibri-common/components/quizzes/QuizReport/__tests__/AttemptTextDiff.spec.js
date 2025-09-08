@@ -58,7 +58,7 @@ const testCases = [
 
 describe('AttemptTextDiff', () => {
   beforeAll(() => {
-    useUser.mockImplementation(() => useUserMock({ currentUserId: 'mockUser1' }));
+    useUser.mockImplementation(() => useUserMock({ id: 'mockUser1' }));
   });
 
   testCases.forEach(({ caseName, correct, diff, userId, expectedMessage }) => {

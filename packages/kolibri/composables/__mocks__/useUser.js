@@ -18,7 +18,7 @@
  *
  * it('test', () => {
  *   useUser.mockImplementation(
- *     () => useUserMock({ isUserLoggedIn: true })
+ *     () => useUserMock({ isLoggedIn: true })
  *   );
  * })
  * ```
@@ -34,7 +34,7 @@ import { computed } from 'vue';
 import { UserKinds } from 'kolibri/constants';
 
 const session = {
-  full_name: '',
+  fullName: '',
   sessionId: undefined,
   kind: [UserKinds.ANONYMOUS],
   username: '',
@@ -42,8 +42,8 @@ const session = {
 
 const MOCK_DEFAULTS = {
   isLearnerOnlyImport: false,
-  isUserLoggedIn: false,
-  currentUserId: null,
+  isLoggedIn: false,
+  id: null,
   isCoach: false,
   isAdmin: false,
   isSuperuser: false,
@@ -53,10 +53,10 @@ const MOCK_DEFAULTS = {
   isFacilityCoach: false,
   isLearner: true,
   isFacilityAdmin: false,
-  getUserPermissions: {},
-  userFacilityId: undefined,
-  getUserKind: UserKinds.ANONYMOUS,
-  userHasPermissions: false,
+  permissions: {},
+  facilityId: undefined,
+  kind: UserKinds.ANONYMOUS,
+  hasPermissions: false,
   session,
   //state
   ...session,

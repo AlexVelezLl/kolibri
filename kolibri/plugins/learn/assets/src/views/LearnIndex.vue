@@ -24,7 +24,7 @@
       NotificationsRoot,
     },
     setup() {
-      const { isUserLoggedIn } = useUser();
+      const { isLoggedIn: isUserLoggedIn } = useUser();
       return {
         isUserLoggedIn,
       };

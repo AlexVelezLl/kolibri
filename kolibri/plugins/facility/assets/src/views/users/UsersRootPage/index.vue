@@ -155,7 +155,7 @@
     mixins: [commonCoreStrings],
     setup() {
       usePreviousRoute();
-      const { currentUserId } = useUser();
+      const user = useUser();
       const { userIsMultiFacilityAdmin } = useFacilities();
       const selectedUsers = ref(new Set());
       const isMoveToTrashModalOpen = ref(false);
@@ -228,7 +228,7 @@
         removeFromClass$,
         deleteSelection$,
         selectedUsers,
-        currentUserId,
+        currentUserId: user.id,
       };
     },
     computed: {

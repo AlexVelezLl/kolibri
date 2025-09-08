@@ -243,7 +243,7 @@
         loading: downloadRequestLoading,
       } = useDownloadRequests();
       const deviceFormTranslator = crossComponentTranslator(AddDeviceForm);
-      const { currentUserId, isUserLoggedIn, isCoach, isAdmin, isSuperuser } = useUser();
+      const user = useUser();
 
       const channel = ref(null);
       const content = ref(null);
@@ -329,11 +329,11 @@
         content,
         loading,
         downloadRequestLoading,
-        isUserLoggedIn,
-        isCoach,
-        isAdmin,
-        isSuperuser,
-        currentUserId,
+        isUserLoggedIn: user.isLoggedIn,
+        isCoach: user.isCoach,
+        isAdmin: user.isAdmin,
+        isSuperuser: user.isSuperuser,
+        currentUserId: user.id,
         showCompletedDownloadSnackbar,
       };
     },

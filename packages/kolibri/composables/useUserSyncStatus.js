@@ -9,7 +9,7 @@ const UserSyncStatusResource = new Resource({
   name: 'usersyncstatus',
 });
 
-const { isLearnerOnlyImport, isUserLoggedIn, currentUserId } = useUser();
+const user = useUser();
 
 const status = ref(SyncStatus.NOT_CONNECTED);
 const queued = ref(false);
@@ -42,10 +42,10 @@ export function fetchUserSyncStatus(params) {
 }
 
 export function pollUserSyncStatusTask() {
-  if (!get(isUserLoggedIn) || !get(isLearnerOnlyImport)) {
+  if (!get(user.isLoggedIn) || !get(user.isLearnerOnlyImport)) {
     return Promise.resolve();
   }
-  return fetchUserSyncStatus({ user: get(currentUserId) }).then(syncData => {
+  return fetchUserSyncStatus({ user: get(user.id) }).then(syncData => {
     if (syncData && syncData[0]) {
       queued.value = syncData[0].queued;
       lastSynced.value = syncData[0].last_synced ? new Date(syncData[0].last_synced) : null;
@@ -67,7 +67,7 @@ export default function useUserSyncStatus() {
   onMounted(() => {
     usageCount.value++;
     if (usageCount.value === 1) {
-      if (get(isUserLoggedIn) && get(isLearnerOnlyImport)) {
+      if (get(user.isLoggedIn) && get(user.isLearnerOnlyImport)) {
         pollUserSyncStatusTask();
       }
       resume();

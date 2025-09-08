@@ -120,7 +120,7 @@ describe('auth message component', () => {
   });
 
   it('does not show a link if the user is logged in', () => {
-    useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+    useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
     const wrapper = makeWrapper();
     expect(wrapper.find('[data-test=signinlink]').exists()).toBe(false);
   });

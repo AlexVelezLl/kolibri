@@ -237,7 +237,7 @@ describe('ExamReport/CurrentTryOverview', () => {
         describe('currentTry.diff.correct > 0 and user viewing own try', () => {
           /* This would be an $tr, at current 'practiceQuizReportImprovedLabelSecondPerson': */
           it('returns a string including currentTry.diff.correct in it', () => {
-            useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+            useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
             const wrapper = shallowMount(CurrentTryOverview, {
               propsData: defaultPropsWith({}, { diff: betterDiff }),
               localVue,
@@ -259,9 +259,7 @@ describe('ExamReport/CurrentTryOverview', () => {
         });
 
         it("returns null when the try is not the current user's try", () => {
-          useUser.mockImplementation(() =>
-            useUserMock({ currentUserId: defaultProps.userId + '-2-3' }),
-          );
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId + '-2-3' }));
           const wrapper = shallowMount(CurrentTryOverview, {
             propsData: defaultPropsWith({}, { diff: betterDiff }),
             localVue,
@@ -279,7 +277,7 @@ describe('ExamReport/CurrentTryOverview', () => {
       });
 
       it('displays annotation string when diff.correct is set and viewed by owning user', () => {
-        useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+        useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
         const wrapper = shallowMount(CurrentTryOverview, {
           propsData: defaultPropsWith({}, { diff: betterDiff }),
           localVue,
@@ -317,7 +315,7 @@ describe('ExamReport/CurrentTryOverview', () => {
 
     describe('showing the time spent annotation', () => {
       describe('computed diffTimeSpent', () => {
-        useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+        useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
         it('returns null when currentTry.diff.time_spent is falsy', () => {
           const wrapper = shallowMount(CurrentTryOverview, {
             localVue,
@@ -327,7 +325,7 @@ describe('ExamReport/CurrentTryOverview', () => {
         });
 
         it('returns Math.floor of currentTry.diff.time_spent / 60', () => {
-          useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
           const wrapper = shallowMount(CurrentTryOverview, {
             propsData: defaultPropsWith({}, { diff: betterDiff }),
             localVue,
@@ -338,7 +336,7 @@ describe('ExamReport/CurrentTryOverview', () => {
 
       describe('computed timeSpentAnnotation', () => {
         it('returns null when currentTry.diff.time_spent is 0 < n < 60', () => {
-          useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
           const wrapper = shallowMount(CurrentTryOverview, {
             localVue,
             propsData: defaultPropsWith({}, { diff: { time_spent: 40 } }),
@@ -347,7 +345,7 @@ describe('ExamReport/CurrentTryOverview', () => {
         });
 
         it('returns null when currentTry.diff.time_spent is falsy', () => {
-          useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
           const wrapper = shallowMount(CurrentTryOverview, {
             localVue,
             propsData: defaultPropsWith({}, { diff: { time_spent: undefined } }),
@@ -358,7 +356,7 @@ describe('ExamReport/CurrentTryOverview', () => {
 
       describe('diffTimeSpent < 0 - try is faster than last', () => {
         it('displays $trs.practiceQuizReportFasterTimeLabel with the abs value of diffTimeSpent', () => {
-          useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
           const wrapper = shallowMount(CurrentTryOverview, {
             localVue,
             propsData: defaultPropsWith({}, { diff: betterDiff }),
@@ -373,7 +371,7 @@ describe('ExamReport/CurrentTryOverview', () => {
 
       describe('diffTimeSpent > 0 try is slower than last', () => {
         it('displays $trs.practiceQuizReportSlowerTimeLabel with the value of diffTimeSpent', () => {
-          useUser.mockImplementation(() => useUserMock({ currentUserId: defaultProps.userId }));
+          useUser.mockImplementation(() => useUserMock({ id: defaultProps.userId }));
           const wrapper = shallowMount(CurrentTryOverview, {
             localVue,
             propsData: defaultPropsWith({}, { diff: worseDiff }),

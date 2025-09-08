@@ -32,10 +32,10 @@ const KolibriStudioDeviceData = {
 
 const { isMinimumKolibriVersion } = useMinimumKolibriVersion(0, 16, 0);
 
-const { isLearnerOnlyImport, canManageContent, isUserLoggedIn } = useUser();
+const user = useUser();
 
 function canAccessStudio() {
-  return !get(isLearnerOnlyImport) && get(canManageContent);
+  return !get(user.isLearnerOnlyImport) && get(user.canManageContent);
 }
 
 function fetchDevices() {
@@ -172,7 +172,7 @@ export default function useDevices(store) {
   }
 
   // Start polling
-  if (get(isUserLoggedIn)) {
+  if (get(user.isLoggedIn)) {
     const fetch = useTimeoutPoll(setNetworkDevices, 5000, { immediate: true });
     // Stop polling
     onBeforeUnmount(() => {
@@ -181,7 +181,7 @@ export default function useDevices(store) {
   }
 
   function keepDeviceChannelsUpdated() {
-    if (get(isUserLoggedIn)) {
+    if (get(user.isLoggedIn)) {
       loadDeviceChannels();
       watch(networkDevices, loadDeviceChannels);
     }

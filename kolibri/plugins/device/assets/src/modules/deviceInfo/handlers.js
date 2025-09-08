@@ -21,10 +21,10 @@ export function getDeviceInfo() {
     data.device_name = nameResponse.data.name;
 
     const { server } = infoResponse.headers;
-    const { isAppContext } = useUser();
+    const user = useUser();
 
     if (server.includes('0.0.0.0')) {
-      if (get(isAppContext)) {
+      if (get(user.isAppContext)) {
         data.server_type = 'Kolibri app server';
       } else {
         data.server_type = 'Kolibri internal server';
@@ -42,8 +42,8 @@ export function getDeviceInfo() {
  * @returns Promise<void>
  */
 export function showDeviceInfoPage(store) {
-  const { canManageContent } = useUser();
-  if (get(canManageContent)) {
+  const user = useUser();
+  if (get(user.canManageContent)) {
     const shouldResolve = samePageCheckGenerator(store);
     const promises = Promise.all([getDeviceInfo()]);
     return promises

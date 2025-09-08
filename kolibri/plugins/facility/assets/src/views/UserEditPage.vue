@@ -176,13 +176,13 @@
     mixins: [commonCoreStrings],
     setup() {
       const { createSnackbar } = useSnackbar();
-      const { currentUserId, logout } = useUser();
+      const user = useUser();
       const { getFacilityConfig, facilityConfig } = useFacilities();
 
       return {
-        logout,
+        logout: user.logout,
         createSnackbar,
-        currentUserId,
+        currentUserId: user.id,
         getFacilityConfig,
         facilityConfig,
       };

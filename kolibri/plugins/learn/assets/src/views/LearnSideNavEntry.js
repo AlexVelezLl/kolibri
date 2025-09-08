@@ -10,8 +10,8 @@ registerNavItem({
     return urls['kolibri:kolibri.plugins.learn:learn']();
   },
   get routes() {
-    const { isUserLoggedIn } = useUser();
-    if (!isUserLoggedIn.value) {
+    const user = useUser();
+    if (!user.isLoggedIn) {
       return [];
     }
     return [

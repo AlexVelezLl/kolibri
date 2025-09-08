@@ -106,7 +106,7 @@
       const bookmarks = ref({});
       // Map of contentNode IDs to bookmark resource IDs
       const bookmarkedContentNodeIds = computed(() => Object.keys(bookmarks.value));
-      const { currentUserId } = useUser();
+      const user = useUser();
 
       /**
        * Fetch bookmarks and store them in the bookmarks ref mapping
@@ -139,7 +139,7 @@
           url: urls['kolibri:core:bookmarks_list'](),
           data: {
             contentnode_id: contentnode_id,
-            user: currentUserId.value,
+            user: user.id.value,
           },
         }).then(() => {
           getBookmarks();

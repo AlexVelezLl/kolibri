@@ -9,8 +9,8 @@ export default [
     name: 'MY_DOWNLOADS',
     component: MyDownloadsPage,
     beforeEnter(to, from, next) {
-      const { isUserLoggedIn } = useUser();
-      if (!get(isUserLoggedIn)) {
+      const user = useUser();
+      if (!get(user.isLoggedIn)) {
         redirectBrowser();
       } else {
         next();

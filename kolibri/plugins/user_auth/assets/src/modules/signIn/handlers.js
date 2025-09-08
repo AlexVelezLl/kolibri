@@ -33,12 +33,12 @@ export function showSignInPage(store) {
   }
   return store.dispatch('setFacilitiesAndConfig').then(() => {
     // Use selected id if available, otherwise get the default facility id from session
-    const { userFacilityId } = useUser();
+    const user = useUser();
     let facilityId;
     if (facilities.value.length > 1) {
-      facilityId = store.state.facilityId || get(userFacilityId);
+      facilityId = store.state.facilityId || get(user.facilityId);
     } else {
-      facilityId = get(userFacilityId);
+      facilityId = get(user.facilityId);
     }
     store.commit('SET_FACILITY_ID', facilityId);
     store.commit('signIn/SET_STATE', {

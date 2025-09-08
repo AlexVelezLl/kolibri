@@ -4,8 +4,8 @@ import { get } from '@vueuse/core';
 export function showManageContentPage(store) {
   store.commit('manageContent/RESET_STATE');
   store.commit('manageContent/wizard/RESET_STATE');
-  const { canManageContent } = useUser();
-  if (get(canManageContent)) {
+  const user = useUser();
+  if (get(user.canManageContent)) {
     return Promise.all([
       store.dispatch('manageContent/refreshTaskList'),
       store.dispatch('manageContent/refreshChannelList'),

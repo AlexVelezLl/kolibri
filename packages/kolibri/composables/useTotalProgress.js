@@ -10,9 +10,9 @@ export default function useTotalProgress() {
   const totalPoints = computed(() => totalProgress.value * MaxPointsPerContent);
 
   const fetchPoints = () => {
-    const { isUserLoggedIn, currentUserId } = useUser();
-    if (get(isUserLoggedIn) && get(totalProgress) === null) {
-      UserProgressResource.fetchModel({ id: get(currentUserId) }).then(progress => {
+    const user = useUser();
+    if (get(user.isLoggedIn) && get(totalProgress) === null) {
+      UserProgressResource.fetchModel({ id: get(user.id) }).then(progress => {
         set(totalProgress, progress.progress);
       });
     }

@@ -11,7 +11,7 @@ const _facilities = ref([]);
 const _facilityId = ref(Lockr.get('facilityId') || null);
 
 export default function useFacilities() {
-  const { userFacilityId, isSuperuser } = useUser();
+  const user = useUser();
 
   // const route = router.currentRoute;
   const selectedFacility = computed(() => {
@@ -19,14 +19,14 @@ export default function useFacilities() {
     if (facilityById) {
       return facilityById;
     }
-    return _facilities.value.find(f => f.id === userFacilityId.value) || null;
+    return _facilities.value.find(f => f.id === user.facilityId.value) || null;
   });
 
   //getters
   const facilities = computed(() => _facilities.value);
   const facilityConfig = computed(() => _facilityConfig.value);
   const userIsMultiFacilityAdmin = computed(() => {
-    return isSuperuser.value && _facilities.value.length > 1;
+    return user.isSuperuser.value && _facilities.value.length > 1;
   });
   const currentFacilityName = computed(() => {
     const match = _facilities.value.find(f => f.id === store.getters.activeFacilityId);
@@ -41,7 +41,7 @@ export default function useFacilities() {
   }
 
   async function getFacilityConfig(facilityId) {
-    const facId = facilityId || userFacilityId.value;
+    const facId = facilityId || user.facilityId.value;
 
     if (!facId) {
       // No facility Id, so redirect and let Kolibri sort it out

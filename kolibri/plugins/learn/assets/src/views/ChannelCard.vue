@@ -93,12 +93,12 @@
     },
     setup() {
       const { windowGutter } = useKResponsiveWindow();
-      const { isUserLoggedIn, isLearner } = useUser();
+      const user = useUser();
 
       return {
         windowGutter,
-        isUserLoggedIn,
-        isLearner,
+        isUserLoggedIn: user.isLoggedIn,
+        isLearner: user.isLearner,
       };
     },
     props: {

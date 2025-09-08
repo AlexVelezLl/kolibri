@@ -59,8 +59,8 @@ export default [
     path: '/create_account',
     component: SignUpPage,
     beforeEnter(to, from, next) {
-      const { isLearnerOnlyImport } = useUser();
-      if (get(isLearnerOnlyImport)) {
+      const user = useUser();
+      if (get(user.isLearnerOnlyImport)) {
         next(router.getRoute(ComponentMap.PROFILE));
         return Promise.resolve();
       }

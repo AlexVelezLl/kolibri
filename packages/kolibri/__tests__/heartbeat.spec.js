@@ -30,7 +30,7 @@ describe('HeartBeat', function () {
     useUser.mockImplementation(() =>
       useUserMock({
         sessionId: 'test_id',
-        currentUserId: 'test_user_id',
+        id: 'test_user_id',
         setSession: mockSetSession,
       }),
     );
@@ -222,7 +222,7 @@ describe('HeartBeat', function () {
       useUser.mockImplementation(() =>
         useUserMock({
           sessionId: 'test',
-          currentUserId: 'current',
+          id: 'current',
           setSession: mockSetSession,
         }),
       );
@@ -240,7 +240,7 @@ describe('HeartBeat', function () {
       useUser.mockImplementation(() =>
         useUserMock({
           sessionId: 'test',
-          currentUserId: 'current',
+          id: 'current',
           setSession: mockSetSession,
         }),
       );
@@ -258,7 +258,7 @@ describe('HeartBeat', function () {
       useUser.mockImplementation(() =>
         useUserMock({
           sessionId: undefined,
-          currentUserId: undefined,
+          id: undefined,
           setSession: mockSetSession,
         }),
       );
@@ -276,7 +276,7 @@ describe('HeartBeat', function () {
       useUser.mockImplementation(() =>
         useUserMock({
           sessionId: 'test',
-          currentUserId: 'current',
+          id: 'current',
           setSession: mockSetSession,
         }),
       );

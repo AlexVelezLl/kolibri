@@ -146,7 +146,7 @@ describe(`HomePage`, () => {
       useDeviceSettings.mockImplementation(() =>
         useDeviceSettingsMock({ canAccessUnassignedContent: true }),
       );
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getClassesSection(wrapper).exists()).toBe(false);
     });
@@ -155,13 +155,13 @@ describe(`HomePage`, () => {
       useDeviceSettings.mockImplementation(() =>
         useDeviceSettingsMock({ canAccessUnassignedContent: false }),
       );
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getClassesSection(wrapper).exists()).toBe(true);
     });
 
     it(`classes are displayed for a signed in user who is enrolled in some classes`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       useLearnerResources.mockImplementation(() =>
         useLearnerResourcesMock({
           classes: [
@@ -186,14 +186,14 @@ describe(`HomePage`, () => {
 
     it(`the section is not displayed for a signed in user who has
       no classes resources or quizzes in progress`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getContinueLearningFromClassesSection(wrapper).exists()).toBe(false);
     });
 
     describe(`for a signed in user who has some resources or quizzes in progress`, () => {
       beforeEach(() => {
-        useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+        useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
         useLearnerResources.mockImplementation(() =>
           useLearnerResourcesMock({
             resumableClassesQuizzes: [
@@ -260,13 +260,13 @@ describe(`HomePage`, () => {
 
     it(`the section is not displayed for a signed in user
       who has no active lessons`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getRecentLessonsSection(wrapper).exists()).toBe(false);
     });
 
     it(`active lessons are displayed for a signed in user who has some`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       useLearnerResources.mockImplementation(() =>
         useLearnerResourcesMock({
           activeClassesLessons: [
@@ -295,13 +295,13 @@ describe(`HomePage`, () => {
 
     it(`the section is not displayed for a signed in user
       who has no active quizzes`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getRecentQuizzesSection(wrapper).exists()).toBe(false);
     });
 
     it(`active quizzes are displayed for a signed in user who has some`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       useLearnerResources.mockImplementation(() =>
         useLearnerResourcesMock({
           activeClassesQuizzes: [
@@ -330,7 +330,7 @@ describe(`HomePage`, () => {
 
     it(`the section is not displayed for a signed in user
       who hasn't finished all their classes resources and quizzes yet`, () => {
-      useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+      useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
       const wrapper = makeWrapper();
       expect(getContinueLearningOnYourOwnSection(wrapper).exists()).toBe(false);
     });
@@ -339,7 +339,7 @@ describe(`HomePage`, () => {
       who has finished all their classes resources and quizzes
       and has some non-classes resources in progress`, () => {
       beforeEach(() => {
-        useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+        useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
         useLearnerResources.mockImplementation(() =>
           useLearnerResourcesMock({
             learnerFinishedAllClasses: true,
@@ -396,7 +396,7 @@ describe(`HomePage`, () => {
 
       it(`the section is not displayed for a signed in user
         who hasn't finished all their classes resources and quizzes yet`, () => {
-        useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+        useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
         const wrapper = makeWrapper();
         expect(getExploreChannelsSection(wrapper).exists()).toBe(false);
       });
@@ -404,7 +404,7 @@ describe(`HomePage`, () => {
       it(`the section is not displayed for a signed in user
         who has finished all their classes resources and quizzes
         when access to unassigned content is not allowed`, () => {
-        useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+        useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
         useLearnerResources.mockImplementation(() =>
           useLearnerResourcesMock({
             learnerFinishedAllClasses: true,
@@ -417,7 +417,7 @@ describe(`HomePage`, () => {
       it(`the section is displayed for a signed in user
         who has finished all their classes resources and quizzes
         when access to unassigned content is allowed`, () => {
-        useUser.mockImplementation(() => useUserMock({ isUserLoggedIn: true }));
+        useUser.mockImplementation(() => useUserMock({ isLoggedIn: true }));
         useLearnerResources.mockImplementation(() =>
           useLearnerResourcesMock({
             learnerFinishedAllClasses: true,

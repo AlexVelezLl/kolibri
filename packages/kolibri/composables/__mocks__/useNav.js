@@ -18,7 +18,7 @@
  *
  * it('test', () => {
  *   useNav.mockImplementation(
- *     () => useNavMock({ isUserLoggedIn: true })
+ *     () => useNavMock({ isLoggedIn: true })
  *   );
  * })
  * ```

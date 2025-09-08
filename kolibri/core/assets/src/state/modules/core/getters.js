@@ -6,8 +6,8 @@ export function pageSessionId(state) {
 }
 
 export function allowAccess(state) {
-  const { isAppContext } = useUser();
-  return state.allowRemoteAccess || get(isAppContext);
+  const user = useUser();
+  return state.allowRemoteAccess || get(user.isAppContext);
 }
 
 export function isPageLoading(state) {

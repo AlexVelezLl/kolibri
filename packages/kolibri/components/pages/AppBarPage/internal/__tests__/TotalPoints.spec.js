@@ -19,7 +19,7 @@ describe('TotalPoints', () => {
   });
 
   test('renders when user is logged in', async () => {
-    useUser.mockImplementation(() => useUserMock({ currentUserId: 1, isUserLoggedIn: true }));
+    useUser.mockImplementation(() => useUserMock({ id: 1, isLoggedIn: true }));
     set(totalPointsMock.totalPoints, 100);
     render(TotalPoints);
 
@@ -28,7 +28,7 @@ describe('TotalPoints', () => {
   });
 
   test('does not render when user is not logged in', async () => {
-    useUser.mockImplementation(() => useUserMock({ currentUserId: 1, isUserLoggedIn: false }));
+    useUser.mockImplementation(() => useUserMock({ id: 1, isLoggedIn: false }));
     set(totalPointsMock.totalPoints, 100);
     render(TotalPoints);
 
@@ -37,14 +37,14 @@ describe('TotalPoints', () => {
   });
 
   test('fetchPoints method is called on created', async () => {
-    useUser.mockImplementation(() => useUserMock({ currentUserId: 1, isUserLoggedIn: true }));
+    useUser.mockImplementation(() => useUserMock({ id: 1, isLoggedIn: true }));
     render(TotalPoints);
 
     expect(totalPointsMock.fetchPoints).toHaveBeenCalledTimes(1);
   });
 
   test('tooltip message is displayed correctly when the mouse hovers over the icon', async () => {
-    useUser.mockImplementation(() => useUserMock({ currentUserId: 1, isUserLoggedIn: true }));
+    useUser.mockImplementation(() => useUserMock({ id: 1, isLoggedIn: true }));
     set(totalPointsMock.totalPoints, 100);
     render(TotalPoints);
 

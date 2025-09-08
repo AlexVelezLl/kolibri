@@ -12,7 +12,7 @@ registerNavItem({
     return urls['kolibri:kolibri.plugins.device:device_management']();
   },
   get routes() {
-    const { canManageContent, isSuperuser, isLearnerOnlyImport } = useUser();
+    const user = useUser();
     const routes = [];
     const routeDefs = [
       {
@@ -20,42 +20,42 @@ registerNavItem({
         route: baseRoutes.content.path,
         icon: 'channel',
         name: baseRoutes.content.name,
-        condition: get(canManageContent) || get(isSuperuser),
+        condition: get(user.canManageContent) || get(user.isSuperuser),
       },
       {
         label: coreStrings.$tr('facilitiesLabel'),
         route: baseRoutes.facilities.path,
         icon: 'facility',
         name: baseRoutes.facilities.name,
-        condition: get(isSuperuser) && !get(isLearnerOnlyImport),
+        condition: get(user.isSuperuser) && !get(user.isLearnerOnlyImport),
       },
       {
         label: coreStrings.$tr('usersLabel'),
         route: baseRoutes.users.path,
         icon: 'audience',
         name: baseRoutes.users.name,
-        condition: get(isSuperuser) && get(isLearnerOnlyImport),
+        condition: get(user.isSuperuser) && get(user.isLearnerOnlyImport),
       },
       {
         label: deviceString('permissionsLabel'),
         route: baseRoutes.permissions.path,
         icon: 'permissions',
         name: baseRoutes.permissions.name,
-        condition: get(isSuperuser),
+        condition: get(user.isSuperuser),
       },
       {
         label: coreStrings.$tr('infoLabel'),
         route: baseRoutes.info.path,
         icon: 'deviceInfo',
         name: baseRoutes.info.name,
-        condition: get(isSuperuser),
+        condition: get(user.isSuperuser),
       },
       {
         label: coreStrings.$tr('settingsLabel'),
         route: baseRoutes.settings.path,
         icon: 'settings',
         name: baseRoutes.settings.name,
-        condition: get(isSuperuser),
+        condition: get(user.isSuperuser),
       },
     ];
     routeDefs.forEach(routeDef => {

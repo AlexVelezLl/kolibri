@@ -135,9 +135,7 @@ describe('TopicsPage', () => {
 
     ContentNodeResource.fetchTree.mockResolvedValue(DEFAULT_TOPIC);
 
-    store = makeStore({
-      getters: { isUserLoggedIn: jest.fn() },
-    });
+    store = makeStore();
     store.state.core = {
       ...store.state.core,
       loading: false,

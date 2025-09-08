@@ -47,7 +47,7 @@
   export default {
     name: 'AuthMessage',
     setup() {
-      const { isUserLoggedIn } = useUser();
+      const { isLoggedIn: isUserLoggedIn } = useUser();
       return { isUserLoggedIn };
     },
     props: {

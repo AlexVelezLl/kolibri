@@ -49,8 +49,8 @@ export function showUserPermissionsPage(store, userId) {
   const stopLoading = () => store.dispatch('notLoading');
 
   // Don't request any data if not an Admin
-  const { isSuperuser } = useUser();
-  if (!get(isSuperuser)) {
+  const user = useUser();
+  if (!get(user.isSuperuser)) {
     setUserPermissionsState({ user: null, permissions: {} });
     stopLoading();
     return Promise.resolve();

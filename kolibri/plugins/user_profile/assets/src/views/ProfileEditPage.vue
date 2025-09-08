@@ -103,7 +103,7 @@
     },
     mixins: [commonCoreStrings],
     setup() {
-      const { isLearnerOnlyImport, isLearner, currentUserId } = useUser();
+      const { isLearnerOnlyImport, isLearner, id: currentUserId } = useUser();
       const { facilityConfig } = useFacilities();
       return { isLearnerOnlyImport, isLearner, currentUserId, facilityConfig };
     },

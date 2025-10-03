@@ -19,7 +19,7 @@
 
     <nav class="pagination-nav">
       <slot name="paginationFooter"></slot>
-      <div class='pagination-actions'>
+      <div class="pagination-actions">
         <span
           dir="auto"
           class="pagination-label"

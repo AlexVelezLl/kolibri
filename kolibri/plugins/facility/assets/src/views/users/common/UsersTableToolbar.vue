@@ -1,6 +1,6 @@
 <template>
 
-  <div style='display: flex; justify-content: space-between; flex-wrap: wrap;'>
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between">
     <div class="search-filter-section">
       <FilterTextbox
         ref="filterTextboxRef"
@@ -27,11 +27,9 @@
       />
     </div>
 
-    <div style="display: flex;">
-      <slot name="userActions">
-      </slot>
+    <div style="display: flex">
+      <slot name="userActions"> </slot>
     </div>
-
   </div>
 
 </template>
@@ -48,23 +46,18 @@
   import { bulkUserManagementStrings } from 'kolibri-common/strings/bulkUserManagementStrings';
   import { overrideRoute } from '../../../utils';
 
-
   export default {
-    name: "UsersTableToolbar",
+    name: 'UsersTableToolbar',
     components: {
-      FilterTextbox
+      FilterTextbox,
     },
     setup(_, { expose }) {
       const route = useRoute();
       const router = useRouter();
       const filterTextboxRef = ref(null);
 
-      const {
-        numFilters$,
-        filterLabel$,
-        numUsersSelected$,
-        clearFiltersLabel$,
-      } = bulkUserManagementStrings;
+      const { numFilters$, filterLabel$, numUsersSelected$, clearFiltersLabel$ } =
+        bulkUserManagementStrings;
 
       const emitSearchTerm = value => {
         if (value === '') {
@@ -133,7 +126,7 @@
         required: true,
       },
     },
-  }
+  };
 
 </script>
 
@@ -159,6 +152,5 @@
   .search-box {
     width: 100%;
   }
-
 
 </style>

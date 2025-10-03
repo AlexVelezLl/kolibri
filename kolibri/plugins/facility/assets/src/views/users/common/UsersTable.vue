@@ -112,10 +112,8 @@
       </KTable>
       <template #paginationFooter>
         <div>
-          <div
-            v-if="selectedUsers.size > 0"
-          >
-            <span style="margin: 0 1em;">
+          <div v-if="selectedUsers.size > 0">
+            <span style="margin: 0 1em">
               {{ numUsersSelected$({ n: selectedUsers.size }) }}
             </span>
 
@@ -714,27 +712,26 @@
     min-height: 0;
   }
 
-/deep/ .pagination-nav {
-  position: fixed;
-  box-shadow:
-    0 0 4px rgba(0, 0, 0, 0.42),
-    0 4px 2px rgba(0, 0, 0, 0.82);
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 1em 0;
-  background-color: white;
-  z-index: 8;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  /deep/ .pagination-nav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 8;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1em 0;
+    background-color: white;
+    box-shadow:
+      0 0 4px rgba(0, 0, 0, 0.42),
+      0 4px 2px rgba(0, 0, 0, 0.82);
 
-.pagination-actions {
-margin: 0 1em;
-}
-
-}
+    .pagination-actions {
+      margin: 0 1em;
+    }
+  }
 
 </style>

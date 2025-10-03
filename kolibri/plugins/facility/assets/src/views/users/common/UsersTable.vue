@@ -3,6 +3,7 @@
   <div class="flex-column">
     <PaginatedListContainerWithBackend
       v-model="currentPage"
+      class="paginated-wrapper"
       :itemsPerPage="itemsPerPage"
       :totalPageNumber="totalPages"
       :numFilteredItems="usersCount"
@@ -713,17 +714,14 @@
   }
 
   /deep/ .pagination-nav {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 8;
+    z-index: 2;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     padding: 1em 0;
+    margin-top: 0;
     background-color: white;
     box-shadow:
       0 0 4px rgba(0, 0, 0, 0.42),
@@ -732,6 +730,16 @@
     .pagination-actions {
       margin: 0 1em;
     }
+  }
+
+  .paginated-wrapper {
+    flex-grow: 1;
+  }
+
+  .paginated-wrapper /deep/ .table-content {
+    display: block;
+    flex-grow: 1;
+    overflow: auto;
   }
 
 </style>

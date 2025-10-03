@@ -13,7 +13,7 @@
       </KGridItem>
     </KGrid>
 
-    <div class="flex-column">
+    <div class="flex-column table-content">
       <slot> </slot>
     </div>
 

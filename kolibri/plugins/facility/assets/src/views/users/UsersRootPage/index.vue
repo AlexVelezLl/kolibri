@@ -110,7 +110,6 @@
         <UsersTable
           ref="usersTableRef"
           class="users-table"
-          :style="{ padding: windowIsSmall ? '0' : '0 1em' }"
           :facilityUsers="facilityUsers"
           :usersCount="usersCount"
           :totalPages="totalPages"
@@ -338,24 +337,15 @@
       },
       headerStyles() {
         return {
-          position: 'fixed',
-          top: this.windowIsSmall ? '6em' : '4em',
-          left: 0,
-          right: 0,
-          backgroundColor: 'white',
-          padding: '1em 1em 0.5em',
-          zIndex: 8,
+          padding: '16px',
         };
       },
       containerStyles() {
-        const paddings = {
-          paddingTop: this.windowIsSmall ? '15.25em!important' : '11.25em!important',
-          paddingBottom: '4em',
-          paddingLeft: 0,
-          paddingRight: 0,
-        };
         return {
-          ...paddings,
+          paddingTop: '64px',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
           backgroundColor: 'white',
         };
       },
@@ -416,18 +406,14 @@
   }
 
   .header-shadow {
+    z-index: 4;
     box-shadow:
       0 0 2px rgba(0, 0, 0, 0.12),
       0 2px 2px rgba(0, 0, 0, 0.2);
   }
 
-  /deep/ .users-table {
-    thead {
-      position: static;
-      z-index: 8;
-      width: 100%;
-      background-color: white;
-    }
+  .users-table {
+    flex-grow: 1;
   }
 
 </style>

@@ -38,4 +38,12 @@ export const coursesStrings = createTranslator('CoursesStrings', {
       'Learners in the assigned group will take a pre-test before starting this course. You can adjust assessment availability in the course settings.',
     context: 'Message for the modal that confirms a course has been assigned.',
   },
+  previousLabel: {
+    message: 'Previous',
+    context: 'Button label for navigating to the previous item in a sequence.',
+  },
+  nextLabel: {
+    message: 'Next',
+    context: 'Button label for navigating to the next item in a sequence.',
+  },
 });

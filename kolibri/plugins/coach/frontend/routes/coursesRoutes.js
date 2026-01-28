@@ -1,6 +1,6 @@
 import { PageNames } from '../constants';
 
-import CoursesRootPage from '../views/courses/CoursesRootPage.vue';
+import CoursesRootPage from '../views/courses/resourceLayoutTest/ResourceLayoutTest.vue';
 import AssignCourseSidePanel from '../views/courses/sidePanels/AssignCourse/index.vue';
 import CourseDetailsSubpage from '../views/courses/sidePanels/AssignCourse/subpages/CourseDetails.vue';
 import PreviewLearnersSubpage from '../views/courses/sidePanels/AssignCourse/subpages/PreviewLearners.vue';

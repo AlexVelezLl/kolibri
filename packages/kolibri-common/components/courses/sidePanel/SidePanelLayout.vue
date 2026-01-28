@@ -58,7 +58,7 @@
       <slot :isScrolled="isScrolled"></slot>
     </div>
     <div
-      v-if="$slots.bottomNavigation"
+      v-if="hasBottomNav"
       ref="fixedBottombar"
       class="bottom-navigation"
       :style="{ backgroundColor: $themeTokens.surface }"
@@ -72,13 +72,13 @@
 
 <script>
 
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import throttle from 'lodash/throttle';
   import { coreStrings } from 'kolibri/uiText/commonCoreStrings';
 
   export default {
     name: 'SidePanelLayout',
-    setup() {
+    setup(props, { slots }) {
       const isScrolled = ref(false);
 
       const _handleScroll = event => {
@@ -88,9 +88,12 @@
       const handleScroll = throttle(_handleScroll, 100);
       const { backAction$, closeAction$ } = coreStrings;
 
+      const hasBottomNav = computed(() => Boolean(slots.bottomNavigation));
+
       return {
         isScrolled,
         handleScroll,
+        hasBottomNav,
 
         backAction$,
         closeAction$,

@@ -6,7 +6,9 @@ import { MAX_QUESTIONS_PER_QUIZ_SECTION } from 'kolibri/constants';
 import { QuizExercise, QuizQuestion } from '../quizCreationSpecs.js';
 import useQuizCreation from '../useQuizCreation.js';
 
-ExamResource.saveModel = jest.fn(() => Promise.resolve({}));
+ExamResource.retrieve = jest.fn(() => Promise.resolve({}));
+ExamResource.create = jest.fn(() => Promise.resolve({}));
+ExamResource.update = jest.fn(() => Promise.resolve({}));
 
 const VALID_EXERCISE_ID = 'af26e1b4f3b94f3e8f4f3b4f3e8f4f3a';
 
@@ -111,7 +113,8 @@ describe('useQuizCreation', () => {
     describe('Quiz CRUD', () => {
       it('Can save the quiz', () => {
         expect(() => saveQuiz()).not.toThrow();
-        expect(ExamResource.saveModel).toHaveBeenCalled();
+        // A freshly initialized quiz has no id, so save() creates it.
+        expect(ExamResource.create).toHaveBeenCalled();
       });
 
       it('Can update the quiz given a subset of valid properties', () => {

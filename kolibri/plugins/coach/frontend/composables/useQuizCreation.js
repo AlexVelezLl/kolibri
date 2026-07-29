@@ -42,6 +42,17 @@ const fieldsToSave = [
 
 export default function useQuizCreation() {
   const store = getCurrentInstance()?.proxy?.$store;
+
+  const _quizId = ref(null);
+
+  // Write helper bound to this exam's identity and payload. `save()` dispatches on the id -
+  // create while it is empty, update (sending just the changed fields) once it is set. `create`
+  // records the baseline for us, and on load `useRetrieve`'s onSuccess sets it via setBaseline.
+  const { setBaseline, save } = ExamResource.useUpdate(_quizId, () => buildSavableQuizPayload());
+
+  const { data: loadedExam, fetchData: fetchExam } = ExamResource.useRetrieve(_quizId, {
+    onSuccess: setBaseline,
+  });
   // -----------
   // Local state
   // -----------
@@ -272,7 +283,9 @@ export default function useQuizCreation() {
       set(_quiz, objectWithDefaults({ collection, assignments }, Quiz));
       addSection();
     } else {
-      const exam = await ExamResource.fetchModel({ id: quizId });
+      set(_quizId, quizId);
+      await fetchExam();
+      const exam = get(loadedExam);
       const { exam: quiz, exercises } = await fetchExamWithContent(exam);
       // Put the exercises into the local cache
       for (const exercise of exercises) {
@@ -287,18 +300,12 @@ export default function useQuizCreation() {
   }
 
   /**
-   * Saves the current quiz state to the server.
-   * @returns {Promise<object>} Resolves with the saved exam object.
+   * Builds the payload persisted for the quiz: the savable fields, plus (for drafts) the
+   * question sources stripped of client-only bookkeeping. Bound as the `data` of exam useUpdate.
+   * @returns {object} The exam payload to send.
    */
-  function saveQuiz() {
-    if (!validateQuiz(get(_quiz))) {
-      return Promise.reject(`Quiz is not valid: ${JSON.stringify(get(_quiz))}`);
-    }
-
+  function buildSavableQuizPayload() {
     const quizData = get(_quiz);
-
-    const id = quizData.id;
-
     const finalQuiz = {};
 
     for (const field of fieldsToSave) {
@@ -306,7 +313,7 @@ export default function useQuizCreation() {
     }
 
     if (finalQuiz.draft) {
-      const questionSourcesWithoutResourcePool = get(allSections).map(section => {
+      finalQuiz.question_sources = get(allSections).map(section => {
         const sectionToSave = { ...section };
         delete sectionToSave.section_id;
         sectionToSave.questions = section.questions.map(question => {
@@ -316,11 +323,23 @@ export default function useQuizCreation() {
         });
         return sectionToSave;
       });
-      finalQuiz.question_sources = questionSourcesWithoutResourcePool;
     }
 
-    return ExamResource.saveModel({ id, data: finalQuiz }).then(exam => {
-      if (id !== exam.id) {
+    return finalQuiz;
+  }
+
+  /**
+   * Saves the current quiz state to the server.
+   * @returns {Promise<object>} Resolves with the saved exam object.
+   */
+  function saveQuiz() {
+    if (!validateQuiz(get(_quiz))) {
+      return Promise.reject(`Quiz is not valid: ${JSON.stringify(get(_quiz))}`);
+    }
+
+    // save() creates when the quiz has no id yet, updates otherwise.
+    return save().then(exam => {
+      if (exam.id && get(_quizId) !== exam.id) {
         updateQuiz({ id: exam.id });
       }
       // Update quizHasChanged to false once we have saved the quiz
@@ -341,6 +360,7 @@ export default function useQuizCreation() {
       throw new TypeError(`Updates are not a valid Quiz object: ${JSON.stringify(updates)}`);
     }
     set(_quiz, { ...get(_quiz), ...updates });
+    set(_quizId, get(_quiz).id);
   }
 
   // --------------------------------

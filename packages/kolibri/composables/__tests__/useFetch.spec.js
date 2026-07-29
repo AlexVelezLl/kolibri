@@ -218,6 +218,53 @@ describe('useFetch', () => {
       });
     });
   });
+  describe('onSuccess', () => {
+    it('should call onSuccess with the response after a successful fetch', async () => {
+      const { fetchMethod, resolveFetch } = getSincronizableFetch();
+      const onSuccess = jest.fn();
+
+      const { fetchData } = useFetch({ fetchMethod, onSuccess });
+
+      fetchData({ id: 'fetch1', response: 'response1' });
+      resolveFetch('fetch1');
+      await nextTick();
+
+      expect(onSuccess).toHaveBeenCalledWith('response1');
+    });
+
+    it('should not call onSuccess for a fetch superseded by a newer one', async () => {
+      const { fetchMethod, resolveFetch } = getSincronizableFetch();
+      const onSuccess = jest.fn();
+
+      const { fetchData } = useFetch({ fetchMethod, onSuccess });
+
+      fetchData({ id: 'fetch1', response: 'response1' });
+      fetchData({ id: 'fetch2', response: 'response2' });
+
+      // The stale fetch resolves last, but must not fire onSuccess - only the latest wins, so a
+      // side effect like a baseline snapshot stays in sync with `data`.
+      resolveFetch('fetch2');
+      resolveFetch('fetch1');
+      await nextTick();
+
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+      expect(onSuccess).toHaveBeenCalledWith('response2');
+    });
+
+    it('should not call onSuccess when the fetch fails', async () => {
+      const { fetchMethod, resolveFetch } = getSincronizableFetch();
+      const onSuccess = jest.fn();
+
+      const { fetchData } = useFetch({ fetchMethod, onSuccess });
+
+      fetchData({ id: 'fetch1', error: 'error1' });
+      resolveFetch('fetch1');
+      await nextTick();
+
+      expect(onSuccess).not.toHaveBeenCalled();
+    });
+  });
+
   describe('fetchMore', () => {
     it('data should be set to response.results of fetchData if fetchMoreMethod is passed', async () => {
       const { fetchMethod, resolveFetch } = getSincronizableFetch();

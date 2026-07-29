@@ -35,10 +35,13 @@ import { ref, computed } from 'vue';
  * the initial data.
  * @param {(more: unknown, ...args: unknown[]) => Promise<unknown>} [options.fetchMoreMethod]
  * Function to fetch more data, called with the previous response's `more` object.
+ * @param {(response: unknown) => void} [options.onSuccess] - Called with the fetched response
+ * after a successful `fetchData`, but only once it has passed the staleness check - a fetch
+ * superseded by a newer one never invokes it. Not called for `fetchMore`.
  * @returns {FetchObject} An object exposing the fetch state and actions.
  */
 export default function useFetch(options) {
-  const { fetchMethod, fetchMoreMethod } = options || {};
+  const { fetchMethod, fetchMoreMethod, onSuccess } = options || {};
 
   const loading = ref(false);
   const data = ref(null);
@@ -88,6 +91,11 @@ export default function useFetch(options) {
         return;
       }
       _setData(response);
+      // Runs only after the staleness check, so a superseded fetch cannot fire onSuccess -
+      // this is what keeps side effects like a baseline snapshot in sync with `data`.
+      if (onSuccess) {
+        onSuccess(response);
+      }
     } catch (err) {
       if (newFetchHasStarted()) {
         return;

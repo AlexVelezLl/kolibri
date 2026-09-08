@@ -148,6 +148,22 @@
   const renderDebounceTime = 300;
   const scaleIncrement = 0.25;
   const MARGIN = 16;
+  const HAMMER_OPTIONS = {
+    // Hammer's default `compute` resolves to `none` as soon as the pinch recognizer
+    // is enabled, and applies it to the element it is attached to - here the
+    // scroller, so on a touch device the browser stops panning the pages at all.
+    // Naming both axes hands panning back without re-enabling the browser's own
+    // pinch zoom, which is ours to interpret. Hammer still sees the touch events
+    // a pinch is made of, so recognition is unaffected.
+    touchAction: 'pan-x pan-y',
+    cssProps: {
+      ...Hammer.defaults.cssProps,
+      // Hammer suppresses selection to smooth out dragging, but the text layer
+      // rendered over each page is there to be selected.
+      userSelect: 'text',
+      touchCallout: 'default',
+    },
+  };
   export default {
     name: 'PdfRendererIndex',
     components: {
@@ -303,7 +319,7 @@
         // does not work well because - even if you zoom in on the PDF, the whole
         // screen zooms too which is jarring.
         if (newVal === true && !this.iOS) {
-          const hammer = Hammer(this.$refs.recycleList.$el);
+          const hammer = Hammer(this.$refs.recycleList.$el, HAMMER_OPTIONS);
           hammer.get('pinch').set({ enable: true });
           hammer.on('pinchin', throttle(this.zoomOut, 1000));
           hammer.on('pinchout', throttle(this.zoomIn, 1000));

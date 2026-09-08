@@ -219,6 +219,68 @@ describe('PdfRendererIndex', () => {
     });
   });
 
+  describe('Touch gestures', () => {
+    // Hammer takes over the scroller to recognize pinch-zooms, and by default
+    // claims every touch on it - which leaves a touch device unable to pan the
+    // pages or select their text.
+    async function mountScroller() {
+      const wrapper = await loadPdfContainer();
+      vm.$refs.recycleList.$emit('update', 0, 0);
+      await global.flushPromises();
+      return wrapper.container.querySelector('.pdf-container');
+    }
+
+    // JSDOM has no Touch constructor, and Hammer only reads coordinates,
+    // an identifier and a target off each touch.
+    function touchEvent(type, target, points) {
+      const touches = points.map(([clientX, clientY], identifier) => ({
+        identifier,
+        target,
+        clientX,
+        clientY,
+      }));
+      const event = new Event(type, { bubbles: true, cancelable: true });
+      Object.assign(event, { touches, changedTouches: touches, targetTouches: touches });
+      return event;
+    }
+
+    it('lets the browser pan the pages', async () => {
+      const scroller = await mountScroller();
+
+      scroller.dispatchEvent(touchEvent('touchstart', scroller, [[100, 300]]));
+      const drag = touchEvent('touchmove', scroller, [[100, 200]]);
+      scroller.dispatchEvent(drag);
+
+      expect(drag.defaultPrevented).toBe(false);
+    });
+
+    it('leaves the text rendered over the pages selectable', async () => {
+      const scroller = await mountScroller();
+      expect(scroller).toHaveStyle({ userSelect: 'text' });
+    });
+
+    it('zooms in when the user pinches out', async () => {
+      const scroller = await mountScroller();
+      vm.scale = 1;
+
+      scroller.dispatchEvent(
+        touchEvent('touchstart', scroller, [
+          [150, 300],
+          [250, 300],
+        ]),
+      );
+      scroller.dispatchEvent(
+        touchEvent('touchmove', scroller, [
+          [100, 300],
+          [300, 300],
+        ]),
+      );
+      await global.flushPromises();
+
+      expect(vm.scale).toBeGreaterThan(1);
+    });
+  });
+
   describe('Pdf controls (Zoom Behavior)', () => {
     it('should show the pdf controls on mount', async () => {
       const wrapper = await loadPdfContainer();
